@@ -1,0 +1,43 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:npd/history_screen.dart';
+import 'package:npd/settings_screen.dart';
+import 'generated/l10n.dart';
+
+import 'how_use_screen.dart';
+
+void main() => runApp(const NpdApp());
+
+class NpdApp extends StatelessWidget {
+  const NpdApp({super.key});
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: S.delegate.supportedLocales,
+      title: 'aaa',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+          primarySwatch: Colors.green,
+          primaryColor: const Color(0xff001000),
+          primaryIconTheme: const IconThemeData(color: Colors.black),
+          primaryTextTheme:
+              const TextTheme(bodyText1: TextStyle(color: Colors.black)),
+          textTheme:
+              const TextTheme(bodyText1: TextStyle(color: Color(0xff001000)))),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const HowUseScreen(),
+        '/history': (context) => const HistoryScreen(),
+        '/settings': (context) => const SettingsScreen(),
+      },
+    );
+  }
+}

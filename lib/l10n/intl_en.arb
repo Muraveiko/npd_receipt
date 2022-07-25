@@ -1,0 +1,225 @@
+{
+    "@@x-loco-version": "1.0.26 20220711-1",
+    "@@locale": "en-US",
+    "@@last_modified": "2022-07-24T22:05:13+0300",
+    "app_name": "Чек НПД",
+    "@app_name": {
+        "type": "text"
+    },
+    "nav_header_title": "Печать чека НПД",
+    "@nav_header_title": {
+        "type": "text"
+    },
+    "nav_header_subtitle": "на термопринтере",
+    "@nav_header_subtitle": {
+        "type": "text"
+    },
+    "nav_header_desc": "Navigation header",
+    "@nav_header_desc": {
+        "type": "text"
+    },
+    "menu_home": "Как пользоваться",
+    "@menu_home": {
+        "type": "text"
+    },
+    "menu_history": "История",
+    "@menu_history": {
+        "type": "text"
+    },
+    "menu_settings": "Настройки",
+    "@menu_settings": {
+        "type": "text"
+    },
+    "title_print": "Печать чека",
+    "@title_print": {
+        "type": "text"
+    },
+    "delete": "Удалить",
+    "@delete": {
+        "type": "text"
+    },
+    "action_delete_all": "Удалить все записи",
+    "@action_delete_all": {
+        "type": "text"
+    },
+    "import_text": "Импорт",
+    "@import_text": {
+        "type": "text"
+    },
+    "text_cancel": "Отмена",
+    "@text_cancel": {
+        "type": "text"
+    },
+    "text_check_number": "Чек №",
+    "@text_check_number": {
+        "type": "text"
+    },
+    "taxomy_inn": "Справочник ИНН",
+    "@taxomy_inn": {
+        "type": "text"
+    },
+    "print_receipt": "Печать чека",
+    "@print_receipt": {
+        "type": "text"
+    },
+    "img_desc": "Чек самозанятого",
+    "@img_desc": {
+        "type": "text"
+    },
+    "save": "Сохранить",
+    "@save": {
+        "type": "text"
+    },
+    "fio": "ФИО",
+    "@fio": {
+        "type": "text"
+    },
+    "action_edit_inn": "ИНН ФИО",
+    "@action_edit_inn": {
+        "type": "text"
+    },
+    "print_image": "Печать картинки чека от АПИ",
+    "@print_image": {
+        "type": "text"
+    },
+    "txt_main_intro": "По закону все самозанятые обязаны передавать заказчику чеки после оплаты. Чек может быть передан в электронной форме.",
+    "@txt_main_intro": {
+        "type": "text"
+    },
+    "txt_main_komu": "Для тех кто решил печатать чеки будет полезна эта программа",
+    "@txt_main_komu": {
+        "type": "text"
+    },
+    "txt_main_need_simple_printer": "Чтобы распечатать чек, не нужна касса. Подойдет простой термопринтер. Для печати с телефона удобнее, чтобы подключение было через блютуз. На алиэкспрес такой принтер можно купить за 20–30 долларов.",
+    "@txt_main_need_simple_printer": {
+        "type": "text"
+    },
+    "txt_main_why_not": "Распечатать качественно картинку чека доступную по ссылке на термопринтере не получается из-за ограничений технологии термопечати. Приложение получает информацию от апи и формирует задание на печать для драйвера, используя команды печати текста и т.д.",
+    "@txt_main_why_not": {
+        "type": "text"
+    },
+    "txt_main_install_driver": "Установите драйвер термопринтера",
+    "@txt_main_install_driver": {
+        "type": "text"
+    },
+    "txt_main_img1": "Вид в плее",
+    "@txt_main_img1": {
+        "type": "text"
+    },
+    "txt_main_rawbt_it_is": "RawBT - это универсальный драйвер. Изначально драйвер умел печатать на ESC/POS совместимых принтерах. Список поддерживаемых моделей постепенно растет.",
+    "@txt_main_rawbt_it_is": {
+        "type": "text"
+    },
+    "txt_main_instr_rawbt": "Установите и настройте в приложении свой принтер.",
+    "@txt_main_instr_rawbt": {
+        "type": "text"
+    },
+    "txt_main_how_send_to_print": "Как отправить на печать",
+    "@txt_main_how_send_to_print": {
+        "type": "text"
+    },
+    "txt_main_img2": "Скриншот из приложения самозянатого",
+    "@txt_main_img2": {
+        "type": "text"
+    },
+    "txt_main_my_nalog_send": "Приложение Мой налог позволяет отправить чек покупателю.",
+    "@txt_main_my_nalog_send": {
+        "type": "text"
+    },
+    "txt_main_img3": "Выбор приложения через которое отправить",
+    "@txt_main_img3": {
+        "type": "text"
+    },
+    "txt_main_start_import_from_api": "Получив ссылку на чек приложение запустит импорт данных в формате json от сервера API налоговой. Мало вероятно, но апи может ответить ошибкой.",
+    "@txt_main_start_import_from_api": {
+        "type": "text"
+    },
+    "txt_main_select_rawbt": "Выберите приложение Чек НПД.",
+    "@txt_main_select_rawbt": {
+        "type": "text"
+    },
+    "txt_main_img4": "Пример ошибки API",
+    "@txt_main_img4": {
+        "type": "text"
+    },
+    "txt_main_text_maybe_changed": "Возможно текст поменяют, а пока в случае ошибки апи отвечает устаревшим текстом.",
+    "@txt_main_text_maybe_changed": {
+        "type": "text"
+    },
+    "txt_main_hope_no_error": "Будем надеяться, что ошибки Вас минуют и после вывода слова `успешно`, программа автоматически перейдет к просмотру чека перед печатью.",
+    "@txt_main_hope_no_error": {
+        "type": "text"
+    },
+    "txt_main_after_import": "После импорта первого чека",
+    "@txt_main_after_import": {
+        "type": "text"
+    },
+    "txt_main_img5": "Ввод ФИО",
+    "@txt_main_img5": {
+        "type": "text"
+    },
+    "txt_main_why_need_fio": "Введите своё ФИО как на чеке. Этой информации нет в ответе сервера и ее требуется ввести один раз. Если Вы ошиблись, то редактирование доступно через меню трех точек в правом верхнем углу.",
+    "@txt_main_why_need_fio": {
+        "type": "text"
+    },
+    "txt_main_custom_template": "Настройка внешнего вида чека",
+    "@txt_main_custom_template": {
+        "type": "text"
+    },
+    "txt_main_go_to_teplate": "Зайдите в раздел настроек приложения. Секция Шаблон.",
+    "@txt_main_go_to_teplate": {
+        "type": "text"
+    },
+    "txt_main_automation": "Автоматизация печати",
+    "@txt_main_automation": {
+        "type": "text"
+    },
+    "txt_main_automation_text": "После настройки внешнего вида чека и получения нужного результата на принтере Вы можете в настройках включить автоматическую печать и закрытие приложения.",
+    "@txt_main_automation_text": {
+        "type": "text"
+    },
+    "txt_main_delete": "Удаление",
+    "@txt_main_delete": {
+        "type": "text"
+    },
+    "txt_main_delete_text": "Можно удалить все записи в списке по иконке в правом верхнем углу или конкретную, сдвинув ее влево до полного раскрытия фоновой надписи `удалить`.",
+    "@txt_main_delete_text": {
+        "type": "text"
+    },
+    "txt_main_privacy": "Приватность данных",
+    "@txt_main_privacy": {
+        "type": "text"
+    },
+    "txt_main_privacy_text": "Приложение Чек НПД и драйвер RawBT оперируют данными в пределах вашего телефона и принтера. Доступ к интернету используется только для получения данных от апи налоговой службы.",
+    "@txt_main_privacy_text": {
+        "type": "text"
+    },
+    "nav_other_title": "Прочее",
+    "@nav_other_title": {
+        "type": "text"
+    },
+    "nav_go_site": "Сайт приложения",
+    "@nav_go_site": {
+        "type": "text"
+    },
+    "nag_go_4pda": "Задать вопрос на 4PDA",
+    "@nag_go_4pda": {
+        "type": "text"
+    },
+    "nav_share": "Поделиться",
+    "@nav_share": {
+        "type": "text"
+    },
+    "nav_policy": "Конфидициальность",
+    "@nav_policy": {
+        "type": "text"
+    },
+    "nav_exit": "Выход",
+    "@nav_exit": {
+        "type": "text"
+    },
+    "tap_twice": "Для выхода нажмите дважды",
+    "@tap_twice": {
+        "type": "text"
+    }
+}
