@@ -3,10 +3,20 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:npd/history_screen.dart';
 import 'package:npd/settings_screen.dart';
 import 'generated/l10n.dart';
-
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'how_use_screen.dart';
 
-void main() => runApp(const NpdApp());
+void main() {
+     initSettings().then((success) => runApp(const NpdApp()) );
+}
+
+
+Future<bool> initSettings() async {
+  await Settings.init(
+    cacheProvider: SharePreferenceCache(),
+  );
+  return true;
+}
 
 class NpdApp extends StatelessWidget {
   const NpdApp({super.key});
@@ -36,7 +46,7 @@ class NpdApp extends StatelessWidget {
       routes: {
         '/': (context) => const HowUseScreen(),
         '/history': (context) => const HistoryScreen(),
-        '/settings': (context) => const SettingsScreen(),
+        '/settings': (context) => const NpdSettingsScreen(),
       },
     );
   }
