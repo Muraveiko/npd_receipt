@@ -218,7 +218,7 @@ class NpdSettingsScreenState extends State<NpdSettingsScreen> {
               onTap: () => showLicensePage(
                   context: context,
                   applicationName: S.of(context).app_name,
-                  applicationIcon: const Image(image: AssetImage('images/logo.png'), height: 128),
+                  applicationIcon: const Image(image: AssetImage('assets/images/logo.png'), height: 128),
               ),
             ),
             SimpleSettingsTile(

@@ -23,7 +23,7 @@ class HowUseScreen extends StatelessWidget {
       ),
       child: ListView(
         children: [
-          const Image(image: AssetImage('images/npd_pic.webp')),
+          const Image(image: AssetImage('assets/images/npd_pic.webp')),
           TextP(
             text: S.of(context).txt_main_intro,
             style: textTheme.bodyText1!
@@ -48,7 +48,7 @@ class HowUseScreen extends StatelessWidget {
               text: S.of(context).txt_main_install_driver,
               style: textTheme.titleLarge!
           ),
-          const ImageP(image: AssetImage('images/rawbt_play.webp')),
+          const ImageP(image: AssetImage('assets/images/rawbt_play.webp')),
           TextP(
               text: S.of(context).txt_main_rawbt_it_is,
               style: textTheme.bodyText1!
@@ -63,12 +63,12 @@ class HowUseScreen extends StatelessWidget {
               text: S.of(context).txt_main_how_send_to_print,
               style: textTheme.titleLarge!
           ),
-          const ImageP(image: AssetImage('images/npd_send_receipt.webp')),
+          const ImageP(image: AssetImage('assets/images/npd_send_receipt.webp')),
           TextP(
               text: S.of(context).txt_main_my_nalog_send,
               style: textTheme.bodyText1!
           ),
-          const ImageP(image: AssetImage('images/select_my.webp')),
+          const ImageP(image: AssetImage('assets/images/select_my.webp')),
           TextP(
               text: S.of(context).txt_main_select_rawbt,
               style: textTheme.bodyText1!
@@ -77,7 +77,7 @@ class HowUseScreen extends StatelessWidget {
               text: S.of(context).txt_main_start_import_from_api,
               style: textTheme.bodyText1!
           ),
-          const ImageP(image: AssetImage('images/npd_import_error.webp')),
+          const ImageP(image: AssetImage('assets/images/npd_import_error.webp')),
           TextP(
               text: S.of(context).txt_main_text_maybe_changed,
               style: textTheme.bodyText1!
@@ -92,7 +92,7 @@ class HowUseScreen extends StatelessWidget {
               text: S.of(context).txt_main_after_import,
               style: textTheme.titleLarge!
           ),
-          const ImageP(image: AssetImage('images/input_fio.webp')),
+          const ImageP(image: AssetImage('assets/images/input_fio.webp')),
           TextP(
               text: S.of(context).txt_main_why_need_fio,
               style: textTheme.bodyText1!

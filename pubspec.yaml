@@ -74,13 +74,13 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-     - images/input_fio.webp
-     - images/npd_import_error.webp
-     - images/npd_pic.webp
-     - images/npd_send_receipt.webp
-     - images/rawbt_play.webp
-     - images/select_my.webp
-     - images/logo.png
+     - assets/images/input_fio.webp
+     - assets/images/npd_import_error.webp
+     - assets/images/npd_pic.webp
+     - assets/images/npd_send_receipt.webp
+     - assets/images/rawbt_play.webp
+     - assets/images/select_my.webp
+     - assets/images/logo.png
 
 
 

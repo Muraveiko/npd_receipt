@@ -44,7 +44,7 @@ class NpdDrawer extends StatelessWidget {
           DrawerHeader(
             decoration: const BoxDecoration(color: Colors.orange),
             child: Column(children: [
-              const Image(image: AssetImage('images/logo.png'), height: 96),
+              const Image(image: AssetImage('assets/images/logo.png'), height: 96),
               const SizedBox(width: 1, height: 4),
               Text(S.of(context).nav_header_title,
                 style: const TextStyle(color: Colors.white, fontSize: 16),
