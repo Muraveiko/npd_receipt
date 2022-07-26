@@ -126,9 +126,11 @@ packages:
   flutter_settings_screens:
     dependency: "direct main"
     description:
-      name: flutter_settings_screens
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: ef8e48a7e5e754b2fc29da05a374de41df7a3f8c
+      url: "https://github.com/GAM3RG33K/flutter_settings_screens.git"
+    source: git
     version: "0.3.3-null-safety+1"
   flutter_test:
     dependency: "direct dev"

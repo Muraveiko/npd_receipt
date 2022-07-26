@@ -39,7 +39,9 @@ dependencies:
   url_launcher: ^6.1.5
   share_plus: ^4.0.10
   double_back_to_close_app: ^2.1.0
-  flutter_settings_screens: ^0.3.2
+  flutter_settings_screens:
+    git:
+      url: https://github.com/GAM3RG33K/flutter_settings_screens.git
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
