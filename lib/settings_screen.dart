@@ -215,7 +215,11 @@ class NpdSettingsScreenState extends State<NpdSettingsScreen> {
             SimpleSettingsTile(
               title: 'Open-source',
               subtitle: 'Лицензии использованного программного обеспечения',
-              onTap: () => debugPrint('Open-source'),
+              onTap: () => showLicensePage(
+                  context: context,
+                  applicationName: S.of(context).app_name,
+                  applicationIcon: const Image(image: AssetImage('images/logo.png'), height: 128),
+              ),
             ),
             SimpleSettingsTile(
               title: 'Графика',
