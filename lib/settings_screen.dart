@@ -1,8 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'generated/l10n.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:flutter/foundation.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 
 import 'inn_screen.dart';
 import 'licenses_screen.dart';
@@ -24,16 +27,40 @@ class NpdSettingsScreenState extends State<NpdSettingsScreen> {
     buildSignature: 'Unknown',
   );
 
+  static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+  int _deviceAndroidSDK = 0;
+
   @override
   void initState() {
     super.initState();
     _initPackageInfo();
+    _initPlatformState();
   }
 
   Future<void> _initPackageInfo() async {
     final info = await PackageInfo.fromPlatform();
     setState(() {
       _packageInfo = info;
+    });
+  }
+
+  Future<void> _initPlatformState() async {
+    int sdk = 0;
+    try {
+      if (!kIsWeb) {
+        if (Platform.isAndroid) {
+          AndroidDeviceInfo build = await deviceInfoPlugin.androidInfo;
+          sdk = build.version.sdkInt!;
+        }
+      }
+    } on PlatformException {
+      sdk = 0;
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      _deviceAndroidSDK = sdk;
     });
   }
 
@@ -61,7 +88,7 @@ class NpdSettingsScreenState extends State<NpdSettingsScreen> {
                 debugPrint('autoStart: $value');
               },
             ),
-            _ForAndroidPlatform(),
+            _ForAndroidPlatform(_deviceAndroidSDK),
 
             DropDownSettingsTile<int>(
               title: 'Количество копий',
@@ -259,6 +286,10 @@ class NpdSettingsScreenState extends State<NpdSettingsScreen> {
 }
 
 class _ForAndroidPlatform extends StatelessWidget{
+  final deviceAndroidSDK;
+
+  _ForAndroidPlatform(this.deviceAndroidSDK);
+
   @override
   Widget build(BuildContext context) {
 
@@ -266,7 +297,7 @@ class _ForAndroidPlatform extends StatelessWidget{
       return SwitchSettingsTile(
         settingKey: '_fictive',
         title: 'Android',
-        subtitle: 'Какая то настройка только для андроида'
+        subtitle: deviceAndroidSDK.toString()
       );
     }else{
       return const SizedBox.shrink();
