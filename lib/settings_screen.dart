@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'generated/l10n.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
@@ -60,11 +61,7 @@ class NpdSettingsScreenState extends State<NpdSettingsScreen> {
                 debugPrint('autoStart: $value');
               },
             ),
-
-            SimpleSettingsTile(
-              title: 'TODO Для андроид 12',
-              subtitle: 'нужные дополнительные действия',
-            ),
+            _ForAndroidPlatform(),
 
             DropDownSettingsTile<int>(
               title: 'Количество копий',
@@ -258,5 +255,22 @@ class NpdSettingsScreenState extends State<NpdSettingsScreen> {
     );
   }
 
+
+}
+
+class _ForAndroidPlatform extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+
+    if(Platform.isAndroid) {
+      return SwitchSettingsTile(
+        settingKey: '_fictive',
+        title: 'Android',
+        subtitle: 'Какая то настройка только для андроида'
+      );
+    }else{
+      return const SizedBox.shrink();
+    }
+  }
 
 }
