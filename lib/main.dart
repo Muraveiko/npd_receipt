@@ -5,6 +5,7 @@ import 'package:npd/settings_screen.dart';
 import 'generated/l10n.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'how_use_screen.dart';
+import 'inn_screen.dart';
 
 void main() {
      initSettings().then((success) => runApp(const NpdApp()) );
@@ -47,6 +48,7 @@ class NpdApp extends StatelessWidget {
         '/': (context) => const HowUseScreen(),
         '/history': (context) => const HistoryScreen(),
         '/settings': (context) => const NpdSettingsScreen(),
+        '/inn': (context) => const InnScreen(),
       },
     );
   }

@@ -4,6 +4,8 @@ import 'generated/l10n.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
+import 'inn_screen.dart';
+
 class NpdSettingsScreen extends StatefulWidget {
   const NpdSettingsScreen({Key? key}) : super(key: key);
 
@@ -21,7 +23,7 @@ class NpdSettingsScreenState extends State<NpdSettingsScreen> {
         SimpleSettingsTile(
           title: 'ИНН',
           subtitle: 'Просмотр справочника ИНН',
-          onTap: () => debugPrint('Custom action'),
+          onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const InnScreen(),)),
         ),
         SettingsGroup(
           title: 'Печать чека',
