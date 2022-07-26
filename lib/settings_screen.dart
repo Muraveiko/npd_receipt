@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:npd/npd_drawer.dart';
 import 'generated/l10n.dart';
-import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'inn_screen.dart';
 import 'licenses_screen.dart';
@@ -15,6 +14,27 @@ class NpdSettingsScreen extends StatefulWidget {
 }
 
 class NpdSettingsScreenState extends State<NpdSettingsScreen> {
+
+  PackageInfo _packageInfo = PackageInfo(
+    appName: 'Unknown',
+    packageName: 'Unknown',
+    version: 'Unknown',
+    buildNumber: 'Unknown',
+    buildSignature: 'Unknown',
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    _initPackageInfo();
+  }
+
+  Future<void> _initPackageInfo() async {
+    final info = await PackageInfo.fromPlatform();
+    setState(() {
+      _packageInfo = info;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -229,7 +249,7 @@ class NpdSettingsScreenState extends State<NpdSettingsScreen> {
             ),
             SimpleSettingsTile(
               title: 'Версия приложения',
-              subtitle: 'x.x.x',
+              subtitle: (_packageInfo.version.isEmpty ? 'x.x.x' : _packageInfo.version) ,
               enabled: false,
             ),
           ]
