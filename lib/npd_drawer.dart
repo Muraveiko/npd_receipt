@@ -75,7 +75,7 @@ class NpdDrawer extends StatelessWidget {
             title: Text(S.of(context).menu_settings),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, '/settings');
+              Navigator.pushNamed(context, '/settings');
             },
           ),
           const Padding(
