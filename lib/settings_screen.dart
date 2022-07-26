@@ -5,6 +5,7 @@ import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
 import 'inn_screen.dart';
+import 'licenses_screen.dart';
 
 class NpdSettingsScreen extends StatefulWidget {
   const NpdSettingsScreen({Key? key}) : super(key: key);
@@ -224,7 +225,7 @@ class NpdSettingsScreenState extends State<NpdSettingsScreen> {
             SimpleSettingsTile(
               title: 'Графика',
               subtitle: 'Лицензии использованных графических изображений',
-              onTap: () => debugPrint('Графика'),
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => LicensesScreen(),)),
             ),
             SimpleSettingsTile(
               title: 'Версия приложения',
