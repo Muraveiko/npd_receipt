@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'generated/l10n.dart';
@@ -88,7 +89,7 @@ class NpdSettingsScreenState extends State<NpdSettingsScreen> {
                 debugPrint('autoStart: $value');
               },
             ),
-            _ForAndroidPlatform(_deviceAndroidSDK),
+            _ForAndroidPlatform(_deviceAndroidSDK,_packageInfo.packageName),
 
             DropDownSettingsTile<int>(
               title: 'Количество копий',
@@ -269,7 +270,7 @@ class NpdSettingsScreenState extends State<NpdSettingsScreen> {
             SimpleSettingsTile(
               title: 'Графика',
               subtitle: 'Лицензии использованных графических изображений',
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => LicensesScreen(),)),
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LicensesScreen(),)),
             ),
             SimpleSettingsTile(
               title: 'Версия приложения',
@@ -286,18 +287,25 @@ class NpdSettingsScreenState extends State<NpdSettingsScreen> {
 }
 
 class _ForAndroidPlatform extends StatelessWidget{
-  final deviceAndroidSDK;
+  final int deviceAndroidSDK;
+  final String packageName;
 
-  _ForAndroidPlatform(this.deviceAndroidSDK);
+  const _ForAndroidPlatform(this.deviceAndroidSDK,this.packageName);
 
   @override
   Widget build(BuildContext context) {
 
-    if(Platform.isAndroid) {
-      return SwitchSettingsTile(
-        settingKey: '_fictive',
-        title: 'Android',
-        subtitle: deviceAndroidSDK.toString()
+    if(Platform.isAndroid && deviceAndroidSDK>30) {
+      return SimpleSettingsTile(
+        title: 'Ссылки на чек (Android 12 и выше)',
+        subtitle: 'Чтобы вместо перехода на сайт налоговой, происходила обработка приложением, потребуется подтвердить выбор в системных настройках.',
+        onTap: (){
+          AndroidIntent intent = AndroidIntent(
+            action: 'android.settings.APPLICATION_DETAILS_SETTINGS',
+            data: "package:$packageName"
+          );
+          intent.launch();
+        },
       );
     }else{
       return const SizedBox.shrink();

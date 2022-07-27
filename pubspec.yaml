@@ -41,6 +41,7 @@ dependencies:
   double_back_to_close_app: ^2.1.0
   package_info_plus: 1.4.3
   device_info_plus: 4.0.1
+  android_intent_plus: 3.1.1
   flutter_settings_screens:
     git:
       url: https://github.com/GAM3RG33K/flutter_settings_screens.git
