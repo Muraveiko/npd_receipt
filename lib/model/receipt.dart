@@ -7,10 +7,10 @@ import 'description_row.dart';
 @Entity(tableName: "receipt_history", primaryKeys: ["inn","receiptId"])
 class Receipt {
   // Кто выписал чек
-  String inn = '';
+  String? inn;
 
   /// ID чека
-  String receiptId = '';
+  String? receiptId;
 
   /// Сумма чека
   double? totalAmount;
@@ -18,6 +18,7 @@ class Receipt {
 
   /// json полученный от апи
   String? sourceJson;
+
 
   // ======================= не храним в базе данных как отдельные поля =============
   /// Дата расчёта

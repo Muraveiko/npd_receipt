@@ -84,9 +84,9 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `receipt_history` (`inn` TEXT NOT NULL, `receiptId` TEXT NOT NULL, `totalAmount` REAL, `sourceJson` TEXT, PRIMARY KEY (`inn`, `receiptId`))');
+            'CREATE TABLE IF NOT EXISTS `receipt_history` (`inn` TEXT, `receiptId` TEXT, `totalAmount` REAL, `sourceJson` TEXT, PRIMARY KEY (`inn`, `receiptId`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `inn_info` (`inn` TEXT NOT NULL, `name` TEXT, PRIMARY KEY (`inn`))');
+            'CREATE TABLE IF NOT EXISTS `inn_info` (`inn` TEXT, `name` TEXT, PRIMARY KEY (`inn`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -107,7 +107,7 @@ class _$AppDatabase extends AppDatabase {
 
 class _$ModelReceipt extends ModelReceipt {
   _$ModelReceipt(this.database, this.changeListener)
-      : _queryAdapter = QueryAdapter(database),
+      : _queryAdapter = QueryAdapter(database, changeListener),
         _receiptInsertionAdapter = InsertionAdapter(
             database,
             'receipt_history',
@@ -116,7 +116,19 @@ class _$ModelReceipt extends ModelReceipt {
                   'receiptId': item.receiptId,
                   'totalAmount': item.totalAmount,
                   'sourceJson': item.sourceJson
-                });
+                },
+            changeListener),
+        _receiptDeletionAdapter = DeletionAdapter(
+            database,
+            'receipt_history',
+            ['inn', 'receiptId'],
+            (Receipt item) => <String, Object?>{
+                  'inn': item.inn,
+                  'receiptId': item.receiptId,
+                  'totalAmount': item.totalAmount,
+                  'sourceJson': item.sourceJson
+                },
+            changeListener);
 
   final sqflite.DatabaseExecutor database;
 
@@ -126,46 +138,58 @@ class _$ModelReceipt extends ModelReceipt {
 
   final InsertionAdapter<Receipt> _receiptInsertionAdapter;
 
-  @override
-  Future<void> delete(String id, String inn) async {
-    await _queryAdapter.queryNoReturn(
-        'DELETE FROM receipt_history WHERE receiptId=?1 and inn=?2',
-        arguments: [id, inn]);
-  }
+  final DeletionAdapter<Receipt> _receiptDeletionAdapter;
 
   @override
-  Future<void> deleteAll() async {
+  Future<void> deleteAllReceipt() async {
     await _queryAdapter.queryNoReturn('DELETE FROM receipt_history');
   }
 
   @override
-  Future<List<Receipt>> getAll() async {
-    return _queryAdapter.queryList('SELECT * FROM receipt_history',
-        mapper: (Map<String, Object?> row) => Receipt());
+  Stream<List<Receipt>> getAllReceipt() {
+    return _queryAdapter.queryListStream('SELECT * FROM receipt_history',
+        mapper: (Map<String, Object?> row) => Receipt(),
+        queryableName: 'receipt_history',
+        isView: false);
   }
 
   @override
-  Future<Receipt?> get(String id, String inn) async {
-    return _queryAdapter.query(
+  Stream<Receipt?> getReceipt(String id, String inn) {
+    return _queryAdapter.queryStream(
         'SELECT * FROM receipt_history WHERE receiptId=?1 and inn=?2',
         mapper: (Map<String, Object?> row) => Receipt(),
-        arguments: [id, inn]);
+        arguments: [id, inn],
+        queryableName: 'receipt_history',
+        isView: false);
   }
 
   @override
-  Future<void> insert(Receipt receipt) async {
+  Future<void> insertReceipt(Receipt receipt) async {
     await _receiptInsertionAdapter.insert(receipt, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> deleteReceipt(Receipt receipt) async {
+    await _receiptDeletionAdapter.delete(receipt);
   }
 }
 
 class _$ModelInn extends ModelInn {
   _$ModelInn(this.database, this.changeListener)
-      : _queryAdapter = QueryAdapter(database),
+      : _queryAdapter = QueryAdapter(database, changeListener),
         _innInfoInsertionAdapter = InsertionAdapter(
             database,
             'inn_info',
             (InnInfo item) =>
-                <String, Object?>{'inn': item.inn, 'name': item.name});
+                <String, Object?>{'inn': item.inn, 'name': item.name},
+            changeListener),
+        _innInfoDeletionAdapter = DeletionAdapter(
+            database,
+            'inn_info',
+            ['inn'],
+            (InnInfo item) =>
+                <String, Object?>{'inn': item.inn, 'name': item.name},
+            changeListener);
 
   final sqflite.DatabaseExecutor database;
 
@@ -175,31 +199,39 @@ class _$ModelInn extends ModelInn {
 
   final InsertionAdapter<InnInfo> _innInfoInsertionAdapter;
 
-  @override
-  Future<void> delete(String inn) async {
-    await _queryAdapter
-        .queryNoReturn('DELETE FROM inn_info WHERE inn=?1', arguments: [inn]);
-  }
+  final DeletionAdapter<InnInfo> _innInfoDeletionAdapter;
 
   @override
-  Future<void> deleteAll() async {
+  Future<void> deleteAllInnInfo() async {
     await _queryAdapter.queryNoReturn('DELETE FROM inn_info');
   }
 
   @override
-  Future<List<InnInfo>> getAll() async {
-    return _queryAdapter.queryList('SELECT * FROM inn_info ORDER by inn',
-        mapper: (Map<String, Object?> row) => InnInfo());
+  Stream<List<InnInfo>> getAllInnInfo() {
+    return _queryAdapter.queryListStream('SELECT * FROM inn_info ORDER by inn',
+        mapper: (Map<String, Object?> row) =>
+            InnInfo(inn: row['inn'] as String?, name: row['name'] as String?),
+        queryableName: 'inn_info',
+        isView: false);
   }
 
   @override
-  Future<InnInfo?> get(String inn) async {
-    return _queryAdapter.query('SELECT * FROM inn_info WHERE inn=?1',
-        mapper: (Map<String, Object?> row) => InnInfo(), arguments: [inn]);
+  Stream<InnInfo?> getInnInfo(String inn) {
+    return _queryAdapter.queryStream('SELECT * FROM inn_info WHERE inn=?1',
+        mapper: (Map<String, Object?> row) =>
+            InnInfo(inn: row['inn'] as String?, name: row['name'] as String?),
+        arguments: [inn],
+        queryableName: 'inn_info',
+        isView: false);
   }
 
   @override
-  Future<void> insert(InnInfo innInfo) async {
+  Future<void> insertInnInfo(InnInfo innInfo) async {
     await _innInfoInsertionAdapter.insert(innInfo, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> deleteInnInfo(InnInfo innInfo) async {
+    await _innInfoDeletionAdapter.delete(innInfo);
   }
 }

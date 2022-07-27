@@ -5,20 +5,20 @@ import '../model/receipt.dart';
 abstract class ModelReceipt {
 
   @Insert(onConflict : OnConflictStrategy.replace)
-  Future<void> insert(Receipt receipt);
+  Future<void> insertReceipt(Receipt receipt);
 
-  @Query("DELETE FROM receipt_history WHERE receiptId=:id and inn=:inn")
-  Future<void> delete(String id, String inn); // здесь только простые типы
+  @delete
+  Future<void> deleteReceipt(Receipt receipt);
 
   @Query("DELETE FROM receipt_history")
-  Future<void> deleteAll();
+  Future<void> deleteAllReceipt();
 
 
   @Query("SELECT * FROM receipt_history")
-  Future<List<Receipt>> getAll();
+  Stream<List<Receipt>> getAllReceipt();
   // @todo сортировку обратную дате импорта
 
   @Query("SELECT * FROM receipt_history WHERE receiptId=:id and inn=:inn")
-  Future<Receipt?> get(String id,String inn);
+  Stream<Receipt?> getReceipt(String id,String inn);
 
 }

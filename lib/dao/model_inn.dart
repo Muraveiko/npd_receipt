@@ -5,20 +5,20 @@ import '../model/inn_info.dart';
 abstract class ModelInn {
 
   @Insert(onConflict: OnConflictStrategy.replace)
-  Future<void> insert(InnInfo innInfo);
+  Future<void> insertInnInfo(InnInfo innInfo);
 
-  @Query("DELETE FROM inn_info WHERE inn=:inn")
-  Future<void> delete(String inn); // здесь только простые типы
+  @delete
+  Future<void> deleteInnInfo(InnInfo innInfo);
 
   @Query("DELETE FROM inn_info")
-  Future<void> deleteAll();
+  Future<void> deleteAllInnInfo();
 
 
   @Query("SELECT * FROM inn_info ORDER by inn")
-  Future<List<InnInfo>> getAll();
+  Stream<List<InnInfo>> getAllInnInfo();
 
 
   @Query("SELECT * FROM inn_info WHERE inn=:inn")
-  Future<InnInfo?> get(String inn);
+  Stream<InnInfo?> getInnInfo(String inn);
 
 }
