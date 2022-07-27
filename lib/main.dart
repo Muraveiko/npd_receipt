@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:npd/dao/database.dart';
 import 'package:npd/history_screen.dart';
 import 'package:npd/settings_screen.dart';
 import 'generated/l10n.dart';
@@ -8,17 +9,18 @@ import 'how_use_screen.dart';
 import 'inn_screen.dart';
 import 'licenses_screen.dart';
 
-void main() {
-     initSettings().then((success) => runApp(const NpdApp()) );
+Future<void> main() async {
+    WidgetsFlutterBinding.ensureInitialized();
+
+     await Settings.init(
+       cacheProvider: SharePreferenceCache(),
+     );
+     await NpdDao.init();
+
+     runApp(const NpdApp());
 }
 
 
-Future<bool> initSettings() async {
-  await Settings.init(
-    cacheProvider: SharePreferenceCache(),
-  );
-  return true;
-}
 
 class NpdApp extends StatelessWidget {
   const NpdApp({super.key});
@@ -49,7 +51,7 @@ class NpdApp extends StatelessWidget {
         '/': (context) => const HowUseScreen(),
         '/history': (context) => const HistoryScreen(),
         '/settings': (context) => const NpdSettingsScreen(),
-        '/inn': (context) => const InnScreen(),
+        '/inn': (context) => InnScreen(),
         '/licenses': (context) => const LicensesScreen(),
       },
     );

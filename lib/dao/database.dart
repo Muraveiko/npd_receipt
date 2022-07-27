@@ -15,3 +15,24 @@ abstract class AppDatabase extends FloorDatabase {
    ModelReceipt get modelReceipt;
    ModelInn get modelInn;
 }
+
+class NpdDao {
+   NpdDao._internal();
+   static final NpdDao _instance = NpdDao._internal();
+   factory NpdDao() {
+      assert(
+      db != null,
+      'Must call NpdDao.init() before using settings!');
+      return _instance;
+   }
+
+   static ModelInn? modelInn;
+   static ModelReceipt? modelReceipt;
+   static AppDatabase? db;
+
+   static Future<void> init() async {
+      db = await $FloorAppDatabase.databaseBuilder("npd_receipt_database.db").build();
+      modelInn = db?.modelInn;
+      modelReceipt = db?.modelReceipt;
+   }
+}
