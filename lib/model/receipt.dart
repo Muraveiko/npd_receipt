@@ -1,8 +1,10 @@
+import 'package:floor/floor.dart';
 import 'package:npd/model/receipt_services.dart';
 
 import 'cancellation_info.dart';
 import 'description_row.dart';
 
+@Entity(tableName: "receipt_history", primaryKeys: ["inn","receiptId"])
 class Receipt {
   // Кто выписал чек
   String inn = '';
@@ -19,71 +21,71 @@ class Receipt {
 
   // ======================= не храним в базе данных как отдельные поля =============
   /// Дата расчёта
- // @Ignore
+  @ignore
   DateTime? operationTime;
 
   /// Список услуг
- // @Ignore
+ @ignore
   List<Service>? services;
 
   /// Дата формирования
-// // @Ignore
+  @ignore
   DateTime? requestTime;
 
-// // @Ignore
+  @ignore
   DateTime? registerTime;
 
   /// Налоговый период, в котором при расчете
   /// налога будет/был учтен чек (формат, yyyyMM)
- // @Ignore
+ @ignore
    int? taxPeriodId;
 
   ///  Тип оплаты
   /// 1) CASH
   /// 2)
- // @Ignore
+ @ignore
   String? paymentType;
 
   /// Источник/Тип дохода:
   /// 1) FROM_INDIVIDUAL (Доход от Физического Лица)
   /// 2) FROM_LEGAL_ENTITY (Доход от Юридического Лица)
   /// 3) FROM_FOREIGN_AGENCY (Доход от Иностранной Организации)
- // @Ignore
+ @ignore
   String?incomeType;
 
- // @Ignore
+ @ignore
   CancellationInfo? cancellationInfo;
 
- // @Ignore
+ @ignore
   String? sourceDeviceId;
 
- // @Ignore
+ @ignore
   String? clientInn;
 
- // @Ignore
+ @ignore
   String? clientDisplayName;
 
- // @Ignore
+ @ignore
   String? partnerDisplayName;
 
- // @Ignore
+ @ignore
   String? partnerInn;
 
- // @Ignore
+ @ignore
   /*
       Строка профессия в шапке под ФИО
      */
    String? profession;
 
- // @Ignore
+ @ignore
    List<DescriptionRow>? description;
 
   /// Email самозанятого
- // @Ignore
+ @ignore
    String? email;
 
   /// Телефон самозанятого
- // @Ignore
+ @ignore
    String? phone;
 
   /**
