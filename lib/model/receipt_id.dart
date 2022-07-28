@@ -1,6 +1,6 @@
 import 'package:npd/model/receipt.dart';
 
-class ReceiptId  { // implements Parcelable
+class ReceiptId  {
   /// Кто выписал чек
    String? inn;
 
