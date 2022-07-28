@@ -16,6 +16,7 @@ class HistoryScreen extends StatefulWidget {
 
 class HistoryScreenState extends State<HistoryScreen> {
   final _textFieldController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -40,25 +41,49 @@ class HistoryScreenState extends State<HistoryScreen> {
                 showDialog(context: context,
                     builder: (context) => AlertDialog(
                       title: const Text('Ссылка на чек'),
-                      content: TextField(
-                        minLines: 2,
-                        maxLines: 2,
-                        controller: _textFieldController,
-                        decoration: const InputDecoration(
-                            hintText: "https://lknpd.nalog.ru/api/v1/receipt/ИНН/ИД/print",
-                            hintStyle: TextStyle(fontSize: 12),
-                        ),
+                      content: Form(key: _formKey,child:
+                        Column(crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                          TextFormField(
+                            minLines: 2,
+                            maxLines: 2,
+                            controller: _textFieldController,
+                            decoration: const InputDecoration(
+                                hintText: "https://lknpd.nalog.ru/api/v1/receipt/ИНН/ИД/print",
+                                hintStyle: TextStyle(fontSize: 12),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter some text';
+                              }
+                              return null;
+                            },
+                           ),
+                           Padding(padding: const EdgeInsets.fromLTRB(0, 32, 0, 0) ,child:
+                           Row(mainAxisAlignment: MainAxisAlignment.end,
+                             children: [
+                             TextButton(
+                               child: const Text('Отмена'),
+                               onPressed: () => Navigator.pop(context),
+                             ),
+                             ElevatedButton(
+                               child: const Text('Импорт'),
+                               onPressed: () {
+                                 if (_formKey.currentState!.validate()) {
+                                   // If the form is valid, display a snackbar. In the real world,
+                                   // you'd often call a server or save the information in a database.
+                                   ScaffoldMessenger.of(context).showSnackBar(
+                                     SnackBar(content: Text(_textFieldController.text)),
+                                   );
+                                 }
+                               },
+                             ),
+                           ],)
+                           ),
+                          ]
+                        )
                       ),
-                      actions: [
-                        TextButton(
-                           child: const Text('Отмена'),
-                           onPressed: () => Navigator.pop(context),
-                        ),
-                        ElevatedButton(
-                          child: const Text('Импорт'),
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                      ],
                     ),
                 );
           }),
