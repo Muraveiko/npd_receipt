@@ -73,7 +73,7 @@ class NpdSettingsScreenState extends State<NpdSettingsScreen> {
         SimpleSettingsTile(
           title: 'ИНН',
           subtitle: 'Просмотр справочника ИНН',
-          onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => InnScreen(),)),
+          onTap: () => Navigator.pushNamed(context, '/inn'),
         ),
         SettingsGroup(
           title: 'Печать чека',
@@ -270,7 +270,7 @@ class NpdSettingsScreenState extends State<NpdSettingsScreen> {
             SimpleSettingsTile(
               title: 'Графика',
               subtitle: 'Лицензии использованных графических изображений',
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LicensesScreen(),)),
+              onTap: () => Navigator.pushNamed(context, '/licenses'),
             ),
             SimpleSettingsTile(
               title: 'Версия приложения',
