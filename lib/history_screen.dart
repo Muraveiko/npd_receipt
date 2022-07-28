@@ -5,6 +5,8 @@ import 'dao/database.dart';
 import 'generated/l10n.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 
+import 'model/receipt_id.dart';
+
 
 class HistoryScreen extends StatefulWidget {
 
@@ -53,12 +55,7 @@ class HistoryScreenState extends State<HistoryScreen> {
                                 hintText: "https://lknpd.nalog.ru/api/v1/receipt/ИНН/ИД/print",
                                 hintStyle: TextStyle(fontSize: 12),
                             ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter some text';
-                              }
-                              return null;
-                            },
+                            validator: (value)=>ReceiptId.validateUrl(value),
                            ),
                            Padding(padding: const EdgeInsets.fromLTRB(0, 32, 0, 0) ,child:
                            Row(mainAxisAlignment: MainAxisAlignment.end,
