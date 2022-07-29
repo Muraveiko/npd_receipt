@@ -49,9 +49,9 @@ class NpdApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const HowUseScreen(),
-        '/history': (context) => HistoryScreen(),
+        '/history': (context) => const HistoryScreen(),
         '/settings': (context) => const NpdSettingsScreen(),
-        '/inn': (context) => InnScreen(),
+        '/inn': (context) => const InnScreen(),
         '/licenses': (context) => const LicensesScreen(),
       },
     );

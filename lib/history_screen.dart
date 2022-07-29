@@ -22,9 +22,6 @@ class HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _textFieldController.text = 'https://lknpd.nalog.ru/api/v1/receipt/780221389642/201664lvto/print';
-//    _textFieldController.text = 'https://lknpd.nalog.ru/api/v1/receipt/772461154320/200d354j26/print';
-//    _textFieldController.text = 'https://lknpd.nalog.ru/api/v1/receipt/645392711268/2003fr6g6m/print';
 
     return Scaffold(
         appBar: AppBar(

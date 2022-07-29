@@ -12,10 +12,10 @@ String getRandomString(int length, {int fromMax = _chars.length}) => String.from
     length, (_) => _chars.codeUnitAt(_rnd.nextInt(fromMax))));
 
 class InnScreen extends StatefulWidget {
+  const InnScreen({Key? key}) : super(key: key);
 
   @override
   InnScreenState createState() => InnScreenState();
-
 
 }
 
