@@ -74,10 +74,8 @@ class Receipt {
  @ignore
   String? partnerInn;
 
+ /// Строка профессия в шапке под ФИО
  @ignore
-  /*
-      Строка профессия в шапке под ФИО
-     */
    String? profession;
 
  @ignore
@@ -89,27 +87,36 @@ class Receipt {
 
   /// Телефон самозанятого
  @ignore
-   String? phone;
+ String? phone;
 
   /// Создает чек из ответа от АПИ
-  ///
-  /// @param  json ответ от апи
-  /// @return Receipt
+  /// в дарте разбор делается через jsonDecode(jsonData) из dart:convert
+   static Receipt fromJSON(Map<String, dynamic> data) {
+     final inn = data['inn'] as String;
+     final receiptId = data['receiptId'] as String;
+     final totalAmount = data['totalAmount'] as double;
 
-   static Receipt fromJSON(String json) {
+     var receipt = Receipt(inn: inn, receiptId: receiptId,totalAmount:totalAmount);
 
-    /*
-    GsonBuilder gsonBuilder = new GsonBuilder();
-    Gson gson = gsonBuilder.create();
-    Receipt receipt = gson.fromJson(json, Receipt.class);
-    receipt.sourceJson = json;
+     receipt.operationTime = DateTime.parse(data['operationTime'] as String);
+     receipt.requestTime = DateTime.parse(data['requestTime'] as String);
+     receipt.registerTime = DateTime.parse(data['registerTime'] as String);
 
-     */
+     receipt.taxPeriodId = data['taxPeriodId'] as int?;
 
-     Receipt receipt = Receipt();
-     receipt.inn = 'ИНН'; // фиктивно правильно разобрал поле
+     receipt.paymentType = data['paymentType'] as String?;
+     receipt.incomeType = data['incomeType'] as String?;
+     receipt.sourceDeviceId = data['sourceDeviceId'] as String?;
+     receipt.clientInn = data['clientInn'] as String?;
+     receipt.clientDisplayName = data['clientDisplayName'] as String?;
+     receipt.partnerDisplayName = data['partnerDisplayName'] as String?;
+     receipt.partnerInn = data['partnerInn'] as String?;
+     receipt.profession = data['profession'] as String?;
+     receipt.email = data['email'] as String?;
+     receipt.phone = data['phone'] as String?;
+
      return receipt;
-  }
+   }
 
 
 }  
