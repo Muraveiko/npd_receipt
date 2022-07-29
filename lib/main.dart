@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:npd/dao/database.dart';
 import 'package:npd/history_screen.dart';
 import 'package:npd/settings_screen.dart';
+import 'package:npd/view_screen.dart';
 import 'generated/l10n.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'how_use_screen.dart';
@@ -53,6 +54,15 @@ class NpdApp extends StatelessWidget {
         '/settings': (context) => const NpdSettingsScreen(),
         '/inn': (context) => const InnScreen(),
         '/licenses': (context) => const LicensesScreen(),
+      },
+      onGenerateRoute: (routeSettings) {
+        var path = routeSettings.name?.split('/');
+        if(path?[1] == 'view'){
+          return MaterialPageRoute(
+              builder: (context) => ViewScreen(inn:path?[2],receiptId:path?[3]),
+              settings: routeSettings
+          );
+        }
       },
     );
   }

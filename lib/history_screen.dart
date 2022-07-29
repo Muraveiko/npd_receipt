@@ -23,6 +23,7 @@ class HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
 
+
     return Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).menu_history),
@@ -138,17 +139,21 @@ class ReceiptListItem extends StatelessWidget{
             ),
             child:
              Padding(padding: const EdgeInsets.all(8.0),
-                child:Card(
-                  margin: const EdgeInsets.all(0.0),
-                  elevation: 0,
-                  shape: const RoundedRectangleBorder(
-                      side:  BorderSide(color: Colors.black12,width: 1),
-                      borderRadius: BorderRadius.all(Radius.circular(2))
-                  ),
-                  child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child:
-                          Column(
+                child:InkWell(
+                    onTap: (){
+                      Navigator.pushNamed(context, "/view/${model.inn}/${model.receiptId}");
+                    },
+                    child:Card(
+                      margin: const EdgeInsets.all(0.0),
+                      elevation: 0,
+                      shape: const RoundedRectangleBorder(
+                          side:  BorderSide(color: Colors.black12,width: 1),
+                          borderRadius: BorderRadius.all(Radius.circular(2))
+                      ),
+                      child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child:
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children:[
                               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -162,8 +167,9 @@ class ReceiptListItem extends StatelessWidget{
                               ),
                               Text(model.receiptId!,style: TextStyle(color: Colors.black54,fontSize: 13),),
                            ])
-                  ),
-              )
+                      ),
+                    )
+                )
           )
       );
 
