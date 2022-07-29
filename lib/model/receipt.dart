@@ -20,6 +20,8 @@ class Receipt {
   String? sourceJson;
 
 
+  Receipt({this.inn, this.receiptId, this.totalAmount, this.sourceJson});
+
   // ======================= не храним в базе данных как отдельные поля =============
   /// Дата расчёта
   @ignore

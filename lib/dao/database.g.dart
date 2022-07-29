@@ -148,7 +148,11 @@ class _$ModelReceipt extends ModelReceipt {
   @override
   Stream<List<Receipt>> getAllReceipt() {
     return _queryAdapter.queryListStream('SELECT * FROM receipt_history',
-        mapper: (Map<String, Object?> row) => Receipt(),
+        mapper: (Map<String, Object?> row) => Receipt(
+            inn: row['inn'] as String?,
+            receiptId: row['receiptId'] as String?,
+            totalAmount: row['totalAmount'] as double?,
+            sourceJson: row['sourceJson'] as String?),
         queryableName: 'receipt_history',
         isView: false);
   }
@@ -157,7 +161,11 @@ class _$ModelReceipt extends ModelReceipt {
   Stream<Receipt?> getReceipt(String id, String inn) {
     return _queryAdapter.queryStream(
         'SELECT * FROM receipt_history WHERE receiptId=?1 and inn=?2',
-        mapper: (Map<String, Object?> row) => Receipt(),
+        mapper: (Map<String, Object?> row) => Receipt(
+            inn: row['inn'] as String?,
+            receiptId: row['receiptId'] as String?,
+            totalAmount: row['totalAmount'] as double?,
+            sourceJson: row['sourceJson'] as String?),
         arguments: [id, inn],
         queryableName: 'receipt_history',
         isView: false);
