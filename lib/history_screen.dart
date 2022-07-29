@@ -22,6 +22,10 @@ class HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _textFieldController.text = 'https://lknpd.nalog.ru/api/v1/receipt/780221389642/201664lvto/print';
+//    _textFieldController.text = 'https://lknpd.nalog.ru/api/v1/receipt/772461154320/200d354j26/print';
+//    _textFieldController.text = 'https://lknpd.nalog.ru/api/v1/receipt/645392711268/2003fr6g6m/print';
+
     return Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).menu_history),
@@ -48,9 +52,9 @@ class HistoryScreenState extends State<HistoryScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                           TextFormField(
+                            controller: _textFieldController,
                             minLines: 2,
                             maxLines: 2,
-                            controller: _textFieldController,
                             decoration: const InputDecoration(
                                 hintText: "https://lknpd.nalog.ru/api/v1/receipt/ИНН/ИД/print",
                                 hintStyle: TextStyle(fontSize: 12),
@@ -70,9 +74,12 @@ class HistoryScreenState extends State<HistoryScreen> {
                                  if (_formKey.currentState!.validate()) {
                                    // If the form is valid, display a snackbar. In the real world,
                                    // you'd often call a server or save the information in a database.
-                                   ScaffoldMessenger.of(context).showSnackBar(
-                                     SnackBar(content: Text(_textFieldController.text)),
-                                   );
+                                   var receiptIdd = ReceiptId.fromURI(Uri.parse(_textFieldController.text));
+                                   var receipt = Receipt();
+                                   receipt.inn = receiptIdd.inn;
+                                   receipt.receiptId = receiptIdd.receiptId;
+                                   NpdDao.modelReceipt?.insertReceipt(receipt);
+                                   Navigator.pop(context);
                                  }
                                },
                              ),
@@ -107,23 +114,62 @@ class ReceiptListItem extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
-      key:Key(model.inn??""),
-      onDismissed: (direction){
-        NpdDao.modelReceipt?.deleteReceipt(model);
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Запись удалена')
-            ));
-      },
-      child:
-      const Card(
-          margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 12.0),
-          child:
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text('TODO'),
+
+    return
+      Dismissible(
+          key:Key(model.receiptId??""),
+          direction: DismissDirection.endToStart,
+          onDismissed: (direction){
+            NpdDao.modelReceipt?.deleteReceipt(model);
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Запись удалена')
+                ));
+          },
+          background:
+            Padding(padding: const EdgeInsets.all(8.0),
+              child:
+               Container(
+                 alignment: AlignmentDirectional.centerEnd,
+                 color: Colors.orange,
+                 child: const Padding(
+                    padding: EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
+                     child: Icon(Icons.delete,
+                          color: Colors.white,
+                      ),
+                 ),
+               ),
+            ),
+            child:
+             Padding(padding: const EdgeInsets.all(8.0),
+                child:Card(
+                  margin: const EdgeInsets.all(0.0),
+                  elevation: 0,
+                  shape: const RoundedRectangleBorder(
+                      side:  BorderSide(color: Colors.black12,width: 1),
+                      borderRadius: BorderRadius.all(Radius.circular(2))
+                  ),
+                  child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child:
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children:[
+                              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children:[
+                                    Text('01.02.2021 14:53:00 (+03:00)',style: TextStyle(color: Colors.black54,fontSize: 13)),
+                                    Text('123 500.00',style: TextStyle(color: Colors.orange,fontSize: 18)),
+                              ]),
+                              Padding(padding: EdgeInsets.fromLTRB(0,8.0,0,8.0),
+                                  child:
+                                    Text('Название услуги')
+                              ),
+                              Text(model.receiptId!,style: TextStyle(color: Colors.black54,fontSize: 13),),
+                           ])
+                  ),
+              )
           )
-      ),
-    );
+      );
+
+
   }
 }
