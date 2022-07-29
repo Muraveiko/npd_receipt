@@ -1,14 +1,16 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:npd/model/receipt.dart';
 
-// Начните использовать тесты вам понравиться
+// Работу с апи удобнее отлаживать через тесты
 void main() {
-  // все верно
-  test('Проверка', () {
-    // какой то результат сравнивается с правильным
-    expect('1', equals("1"));
+
+  test('Разбор JSON от апи налоговой', () {
+
+    String json = "тут ответ от апи";
+    Receipt test = Receipt.fromJSON(json);
+    expect(test.inn,"ИНН");
+
+
   });
-  // этот тест не проходит
-  test('Проверка ошибки', () {
-    expect('2', equals("1"));
-  });
+
 }

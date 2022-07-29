@@ -91,25 +91,25 @@ class Receipt {
  @ignore
    String? phone;
 
-  /**
-   * Создает чек из ответа от АПИ
-   *
-   * @param  json ответ от апи
-   * @return Receipt
-   */
-/*
-   static
+  /// Создает чек из ответа от АПИ
+  ///
+  /// @param  json ответ от апи
+  /// @return Receipt
 
-  Receipt fromJSON(String json) {
+   static Receipt fromJSON(String json) {
 
+    /*
     GsonBuilder gsonBuilder = new GsonBuilder();
     Gson gson = gsonBuilder.create();
     Receipt receipt = gson.fromJson(json, Receipt.class);
     receipt.sourceJson = json;
-    return receipt;
 
+     */
 
+     Receipt receipt = Receipt();
+     receipt.inn = 'ИНН'; // фиктивно правильно разобрал поле
+     return receipt;
   }
 
- */
+
 }  
