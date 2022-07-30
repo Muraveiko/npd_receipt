@@ -4,33 +4,32 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:npd/model/api_error_response.dart';
 
 import 'package:npd/model/receipt.dart';
 import 'package:npd/model/receipt_id.dart';
 
 // Работу с апи удобнее отлаживать через тесты
 
-// https://flutter.su/tutorial/7-HTTP-network-requests
-Future<bool> debugApi  () async {
+// будущий метод класса работы с апи
+Future<Receipt> getFromApi  (String url) async {
 
-   try{
-     String url = '';
      ReceiptId rId = ReceiptId.fromURI(Uri.parse(url));
      final response =  await http.get(Uri.parse(rId.jsonUrl()));
-     final jsonString = utf8.decode(response.bodyBytes); // fix !!!!
-     debugPrint("Response status: ${response.statusCode}");
-     debugPrint("Response body: $jsonString");
-     return true;
-  }catch(error){
-     debugPrint("Error: $error");
-  }
-  return false;
+     final jsonString = utf8.decode(response.bodyBytes);
+     if(response.statusCode != 200){
+        final apiErr = ApiErrorResponse.fromJSON(jsonDecode(jsonString));
+        debugPrint(jsonString);
+        throw Exception(apiErr.message);
+     }
+
+     return Receipt.fromStringJSON(jsonString);
 }
 
 void main() {
 
   test('PlayGround',() async {
-    expect( await debugApi() , isTrue);
+    expect( await getFromApi('тут урл') , Receipt());
   });
 
   test('Заготовка Разбор JSON от апи налоговой', () {
