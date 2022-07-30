@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:npd/model/receipt.dart';
 import 'package:npd/npd_drawer.dart';
+import 'api_npd.dart';
 import 'dao/database.dart';
 import 'generated/l10n.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
@@ -70,15 +71,23 @@ class HistoryScreenState extends State<HistoryScreen> {
                                child: const Text('Импорт'),
                                onPressed: () {
                                  if (_formKey.currentState!.validate()) {
-                                   // If the form is valid, display a snackbar. In the real world,
-                                   // you'd often call a server or save the information in a database.
-                                   var receiptIdd = ReceiptId.fromURI(Uri.parse(_textFieldController.text));
-                                   var receipt = Receipt();
-                                   receipt.inn = receiptIdd.inn;
-                                   receipt.receiptId = receiptIdd.receiptId;
-                                   NpdDao.modelReceipt?.insertReceipt(receipt);
+
+                                   () async {
+                                     try {
+                                       var receipt = await NpdAPI.getFromApi(
+                                           _textFieldController.text);
+                                       NpdDao.modelReceipt?.insertReceipt(
+                                           receipt);
+                                     }catch(error){
+                                       ScaffoldMessenger.of(context).showSnackBar(
+                                           SnackBar(content: Text(error.toString()))
+                                           );
+                                     }
+                                   }.call();
+
                                    Navigator.pop(context);
                                  }
+
                                },
                              ),
                            ],)
