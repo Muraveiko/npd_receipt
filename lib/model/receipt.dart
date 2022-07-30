@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:floor/floor.dart';
 import 'receipt_services.dart';
 import 'cancellation_info.dart';
@@ -90,6 +92,12 @@ class Receipt {
 
   /// Создает чек из ответа от АПИ
   /// в дарте разбор делается через jsonDecode(jsonData) из dart:convert
+   static Receipt fromStringJSON(String jsonData){
+     var receipt = Receipt.fromJSON(jsonDecode(jsonData));
+     receipt.sourceJson = jsonData;
+     return receipt;
+   }
+
    static Receipt fromJSON(Map<String, dynamic> data) {
      final inn = data['inn'] as String;
      final receiptId = data['receiptId'] as String;

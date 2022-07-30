@@ -10,13 +10,12 @@ void main() {
 
     String json = "";
 
-    Receipt test = Receipt.fromJSON(jsonDecode(json));
+    Receipt test = Receipt.fromStringJSON(json);
+    expect(test.sourceJson, json);
 
     expect(test.inn,"");
     expect(test.receiptId,"");
     expect(test.totalAmount,0.00);
-
-    // sourceJson
 
 
     expect(test.operationTime, DateTime.parse(""));
