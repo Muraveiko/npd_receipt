@@ -1,13 +1,33 @@
-import 'dart:io';
+
+import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:npd/model/receipt.dart';
 
 // Работу с апи удобнее отлаживать через тесты
+
+// https://flutter.su/tutorial/7-HTTP-network-requests
+Future<bool> demoFunc  () async {
+  debugPrint("TUT");
+   try{
+     final response =  await http.get(Uri.parse('https://json.flutter.su/echo'));
+     debugPrint("Response status: ${response.statusCode}");
+     debugPrint("Response body: ${response.body}");
+     return true;
+  }catch(error){
+     debugPrint("Error: $error");
+  }
+  return false;
+}
+
 void main() {
 
-  test('PlayGround',() {
-    debugPrint('Еще один способ использовать тесты для запуска кусочков кода напрямую');
+  test('PlayGround',() async {
+    debugPrint("AGA");
+    expect( await demoFunc() , isTrue);
+    debugPrint("UGU");
+
   });
 
   test('Заготовка Разбор JSON от апи налоговой', () {
