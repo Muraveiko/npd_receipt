@@ -1,6 +1,5 @@
 import 'package:floor/floor.dart';
-import 'package:npd/model/receipt_services.dart';
-
+import 'receipt_services.dart';
 import 'cancellation_info.dart';
 import 'description_row.dart';
 
@@ -114,6 +113,13 @@ class Receipt {
      receipt.profession = data['profession'] as String?;
      receipt.email = data['email'] as String?;
      receipt.phone = data['phone'] as String?;
+
+     // субклассы
+
+     final servicesData = data['services'] as List<dynamic>?;
+     receipt.services = servicesData?.map(
+             (sData) => Service.fromJSON(sData)
+     ).toList() as List<Service>;
 
      return receipt;
    }
