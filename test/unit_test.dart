@@ -4,14 +4,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:npd/model/receipt.dart';
+import 'package:npd/model/receipt_id.dart';
 
 // Работу с апи удобнее отлаживать через тесты
 
 // https://flutter.su/tutorial/7-HTTP-network-requests
-Future<bool> demoFunc  () async {
-  debugPrint("TUT");
+Future<bool> debugApi  () async {
+
    try{
-     final response =  await http.get(Uri.parse('https://json.flutter.su/echo'));
+     String url = 'урл до чека';
+     ReceiptId rId = ReceiptId.fromURI(Uri.parse(url));
+     final response =  await http.get(Uri.parse(rId.jsonUrl()));
      debugPrint("Response status: ${response.statusCode}");
      debugPrint("Response body: ${response.body}");
      return true;
@@ -24,10 +27,7 @@ Future<bool> demoFunc  () async {
 void main() {
 
   test('PlayGround',() async {
-    debugPrint("AGA");
-    expect( await demoFunc() , isTrue);
-    debugPrint("UGU");
-
+    expect( await debugApi() , isTrue);
   });
 
   test('Заготовка Разбор JSON от апи налоговой', () {
