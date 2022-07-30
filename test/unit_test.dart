@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -12,11 +14,12 @@ import 'package:npd/model/receipt_id.dart';
 Future<bool> debugApi  () async {
 
    try{
-     String url = 'урл до чека';
+     String url = '';
      ReceiptId rId = ReceiptId.fromURI(Uri.parse(url));
      final response =  await http.get(Uri.parse(rId.jsonUrl()));
+     final jsonString = utf8.decode(response.bodyBytes); // fix !!!!
      debugPrint("Response status: ${response.statusCode}");
-     debugPrint("Response body: ${response.body}");
+     debugPrint("Response body: $jsonString");
      return true;
   }catch(error){
      debugPrint("Error: $error");
