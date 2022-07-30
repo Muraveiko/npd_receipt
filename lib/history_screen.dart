@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:npd/model/receipt.dart';
 import 'package:npd/npd_drawer.dart';
 import 'api_npd.dart';
@@ -117,18 +118,20 @@ class HistoryScreenState extends State<HistoryScreen> {
   }
 }
 class ReceiptListItem extends StatelessWidget{
-  final Receipt model;
-  ReceiptListItem(this.model) : super(key: Key(model.receiptId??""));
+  final Receipt item;
+  final Receipt? model;
+  ReceiptListItem(this.item) : model = Receipt.fromStringJSON(item.sourceJson!), super(key: Key(item.receiptId??""));
 
   @override
   Widget build(BuildContext context) {
-
+    final formatPrice = NumberFormat("##,###.00", "ru_RU");
+    final formatDate = DateFormat('d MMM yyyy HH:mm:ss, EEE', "ru_RU");
     return
       Dismissible(
-          key:Key(model.receiptId??""),
+          key:Key(item.receiptId??""),
           direction: DismissDirection.endToStart,
           onDismissed: (direction){
-            NpdDao.modelReceipt?.deleteReceipt(model);
+            NpdDao.modelReceipt?.deleteReceipt(item);
             ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Запись удалена')
                 ));
@@ -151,7 +154,7 @@ class ReceiptListItem extends StatelessWidget{
              Padding(padding: const EdgeInsets.all(8.0),
                 child:InkWell(
                     onTap: (){
-                      Navigator.pushNamed(context, "/view/${model.inn}/${model.receiptId}");
+                      Navigator.pushNamed(context, "/view/${item.inn}/${item.receiptId}");
                     },
                     child:Card(
                       margin: const EdgeInsets.all(0.0),
@@ -168,14 +171,16 @@ class ReceiptListItem extends StatelessWidget{
                               children:[
                               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children:[
-                                    Text('01.02.2021 14:53:00 (+03:00)',style: TextStyle(color: Colors.black54,fontSize: 13)),
-                                    Text('123 500.00',style: TextStyle(color: Colors.orange,fontSize: 18)),
+                                    Text(formatDate.format(model!.operationTime!),
+                                         style: const TextStyle(color: Colors.black54,fontSize: 13)),
+                                    Text(formatPrice.format(model?.totalAmount),
+                                        style: const TextStyle(color: Colors.orange,fontSize: 18)),
                               ]),
-                              Padding(padding: EdgeInsets.fromLTRB(0,8.0,0,8.0),
+                              Padding(padding: const EdgeInsets.fromLTRB(0,8.0,0,8.0),
                                   child:
-                                    Text('Название услуги')
+                                    Text(model!.services![0].name!)
                               ),
-                              Text(model.receiptId!,style: TextStyle(color: Colors.black54,fontSize: 13),),
+                              Text(model!.receiptId!,style: const TextStyle(color: Colors.black54,fontSize: 13),),
                            ])
                       ),
                     )
