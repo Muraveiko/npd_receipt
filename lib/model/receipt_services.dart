@@ -15,7 +15,7 @@ class Service{
 
     final name = data['name'] as String?;
     final quantity = data['quantity'] as int?;
-    final amount = (data['amount'] as int).toDouble(); // TODO fix double
+    final amount = (data['amount'] as num).toDouble(); // TODO fix double
     final serviceNumber = data['serviceNumber'] as int?;
 
     return Service(name: name,quantity: quantity,amount: amount,serviceNumber: serviceNumber );
