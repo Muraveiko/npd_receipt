@@ -59,7 +59,7 @@ class NpdApp extends StatelessWidget {
         var path = routeSettings.name?.split('/');
         if(path?[1] == 'view'){
           return MaterialPageRoute(
-              builder: (context) => ViewScreen(inn:path?[2],receiptId:path?[3]),
+              builder: (context) => ViewScreen(path![2],path[3]),
               settings: routeSettings
           );
         }
