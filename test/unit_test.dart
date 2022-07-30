@@ -1,10 +1,14 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:npd/model/receipt.dart';
-import 'dart:convert';
 
 // Работу с апи удобнее отлаживать через тесты
 void main() {
 
+  test('PlayGround',() {
+    debugPrint('Еще один способ использовать тесты для запуска кусочков кода напрямую');
+  });
 
   test('Заготовка Разбор JSON от апи налоговой', () {
 
