@@ -1,35 +1,18 @@
-
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:npd/model/api_error_response.dart';
 
+import 'package:npd/api_npd.dart';
 import 'package:npd/model/receipt.dart';
-import 'package:npd/model/receipt_id.dart';
+
 
 // Работу с апи удобнее отлаживать через тесты
 
 // будущий метод класса работы с апи
-Future<Receipt> getFromApi  (String url) async {
 
-     ReceiptId rId = ReceiptId.fromURI(Uri.parse(url));
-     final response =  await http.get(Uri.parse(rId.jsonUrl()));
-     final jsonString = utf8.decode(response.bodyBytes);
-     if(response.statusCode != 200){
-        final apiErr = ApiErrorResponse.fromJSON(jsonDecode(jsonString));
-        debugPrint(jsonString);
-        throw Exception(apiErr.message);
-     }
-
-     return Receipt.fromStringJSON(jsonString);
-}
 
 void main() {
 
   test('PlayGround',() async {
-    expect( await getFromApi('тут урл') , Receipt());
+    expect( await NpdAPI.getFromApi('bla-bla') , Receipt());
   });
 
   test('Заготовка Разбор JSON от апи налоговой', () {
