@@ -78,6 +78,7 @@ class HistoryScreenState extends State<HistoryScreen> {
                                            _textFieldController.text);
                                        NpdDao.modelReceipt?.insertReceipt(
                                            receipt);
+                                       _textFieldController.text = "";
                                      }catch(error){
                                        ScaffoldMessenger.of(context).showSnackBar(
                                            SnackBar(content: Text(error.toString()))
