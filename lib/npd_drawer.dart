@@ -41,7 +41,9 @@ class NpdDrawer extends StatelessWidget {
     return Drawer(
       child: ListView(
         children: [
-          DrawerHeader(
+        SizedBox(
+        height: 180.0,
+        child: DrawerHeader(
             decoration: const BoxDecoration(color: Colors.orange),
             child: Column(children: [
               const Image(image: AssetImage('assets/images/logo.png'), height: 96),
@@ -50,9 +52,10 @@ class NpdDrawer extends StatelessWidget {
                 style: const TextStyle(color: Colors.white, fontSize: 16),
               ),
               Text(S.of(context).nav_header_subtitle,
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white, fontSize:14),
               ),
             ]),
+           ),
           ),
           ListTile(
             leading: const Icon(Icons.home),
