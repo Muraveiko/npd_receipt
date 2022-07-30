@@ -121,6 +121,18 @@ class Receipt {
              (sData) => Service.fromJSON(sData)
      ).toList() as List<Service>;
 
+     final descriptionData = data['description'] as List<dynamic>?;
+     receipt.description = descriptionData?.map(
+             (dData) => DescriptionRow.fromJSON(dData)
+     ).toList() as List<DescriptionRow>;
+
+     // здесь один объект-класс
+     final cancellationData = data['cancellationInfo'];
+     if(cancellationData != null) {
+       receipt.cancellationInfo = CancellationInfo.fromJSON(cancellationData);
+     }
+
+
      return receipt;
    }
 
