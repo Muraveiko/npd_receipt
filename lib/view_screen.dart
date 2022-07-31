@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:npd/dao/database.dart';
 import 'generated/l10n.dart';
 import 'model/receipt.dart';
 
@@ -20,8 +21,22 @@ class ViewScreenState extends State<ViewScreen> {
         appBar: AppBar(
           title: Text(S.of(context).menu_settings),
         ),
-        body:  Text('TODO VIEW RECEIPT ${widget.receiptId}')
+        body: StreamBuilder(
+          stream:  NpdDao.modelReceipt?.getReceipt(widget.receiptId, widget.inn),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (snapshot.hasError) {
+              return Text("Error ${snapshot.error}");
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            }
+            Receipt receipt = snapshot.data;
+            return Text(receipt.receiptId!);
+          },),
+
 
     );
   }
+
+
 }
