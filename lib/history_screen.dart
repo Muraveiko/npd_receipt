@@ -77,7 +77,7 @@ class HistoryScreenState extends State<HistoryScreen> {
                                      try {
                                        var receipt = await NpdAPI.getFromApi(
                                            _textFieldController.text);
-                                       NpdDao.modelReceipt?.insertReceipt(
+                                       await NpdDao.modelReceipt?.insertReceipt(
                                            receipt);
                                        _textFieldController.text = "";
                                      }catch(error){
