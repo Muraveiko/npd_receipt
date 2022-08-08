@@ -81,7 +81,7 @@ class ViewScreenState extends State<ViewScreen> {
           if (receipt == null) {
             title = const Text("Wait");
           }else {
-            title = ViewHead(receipt!,innInfo?.name ?? '');
+            title = MultiLinesTitle(receipt!,innInfo?.name ?? '');
           }
           final head = SliverAppBar(
             pinned: true,
@@ -90,6 +90,28 @@ class ViewScreenState extends State<ViewScreen> {
               centerTitle: false,
               title: title,
             ),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.print),
+                onPressed: () => {
+                  debugPrint("Click on upload button")
+                },
+              ),
+              PopupMenuButton(
+                icon: const Icon(Icons.more_vert),
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    value: 1,
+                    child: Text("Печать картинки чека от АПИ"),
+
+                  ),
+                  const PopupMenuItem(
+                        value: 2,
+                        child: Text("ИНН ФИО"),
+                  ),
+                ],
+              )
+            ],
           );
           return head;
 
@@ -152,8 +174,8 @@ class ViewScreenState extends State<ViewScreen> {
     if (_scrollController.hasClients) {
       top -= _scrollController.offset;
     }
-    if(top<24){
-      top = 24;
+    if(top<widget.expandHeight/3){
+      return const SizedBox(height: 0, width: 0,);
     }
     return Positioned(
       top: top,
@@ -168,11 +190,11 @@ class ViewScreenState extends State<ViewScreen> {
 }
 
 
-class ViewHead extends StatelessWidget {
+class MultiLinesTitle extends StatelessWidget {
   final Receipt receipt;
   final String fio;
 
-  const ViewHead(this.receipt,this.fio, {super.key});
+  const MultiLinesTitle(this.receipt,this.fio, {super.key});
 
   @override
   Widget build(BuildContext context) {
