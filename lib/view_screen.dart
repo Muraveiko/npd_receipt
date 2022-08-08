@@ -23,6 +23,8 @@ class ViewScreenState extends State<ViewScreen> {
   Receipt? receipt;
   InnInfo? innInfo;
 
+  bool isShowForm = false;
+
   @override
   void initState() {
     super.initState();
@@ -33,7 +35,9 @@ class ViewScreenState extends State<ViewScreen> {
     NpdDao.modelInn!.getInnInfo(widget.rId.inn!).listen((info) {
       setState(() {
         innInfo = info;
-        _textFieldController.text = innInfo?.name ?? '';
+        final fio = innInfo?.name ?? '';
+        _textFieldController.text = fio;
+        isShowForm = (fio == '') ;
       });
     });
 
@@ -109,7 +113,7 @@ class ViewScreenState extends State<ViewScreen> {
         icon: const Icon(Icons.print),
         onPressed: () =>
         {
-          debugPrint("Click on upload button")
+          debugPrint("PRINT CHECK")
         },
       ));
     }
@@ -127,12 +131,24 @@ class ViewScreenState extends State<ViewScreen> {
           child: Text("ИНН ФИО"),
         ),
       ],
+      onSelected: (value){
+        if(value == 1){
+           debugPrint("PRINT IMAGE");
+        }else if(value == 2){
+          setState(() {
+            isShowForm = true;
+          });
+        }
+      },
     ));
 
     return list;
   }
 
   Widget _buildForm(){
+    if(!isShowForm){
+      return const SliverToBoxAdapter(child: SizedBox.shrink());
+    }
     return SliverToBoxAdapter(child:Card(
         margin: const EdgeInsets.symmetric(vertical: 48.0, horizontal: 16.0),
         child:
@@ -190,13 +206,15 @@ class ViewScreenState extends State<ViewScreen> {
       top -= _scrollController.offset;
     }
     if(top<widget.expandHeight/3){
-      return const SizedBox(height: 0, width: 0,);
+      return const SizedBox.shrink();
     }
     return Positioned(
       top: top,
       right: 16.0,
       child: FloatingActionButton(
-        onPressed: () => {},
+        onPressed: () => {
+          debugPrint("PRINT CHECK")
+        },
         backgroundColor: Colors.orange,
         child: const Icon(Icons.print),
       ),
