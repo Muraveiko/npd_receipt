@@ -90,31 +90,46 @@ class ViewScreenState extends State<ViewScreen> {
               centerTitle: false,
               title: title,
             ),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.print),
-                onPressed: () => {
-                  debugPrint("Click on upload button")
-                },
-              ),
-              PopupMenuButton(
-                icon: const Icon(Icons.more_vert),
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    value: 1,
-                    child: Text("Печать картинки чека от АПИ"),
-
-                  ),
-                  const PopupMenuItem(
-                        value: 2,
-                        child: Text("ИНН ФИО"),
-                  ),
-                ],
-              )
-            ],
+            actions: _buildActions(),
           );
           return head;
 
+  }
+
+  List<Widget> _buildActions(){
+    var list = <Widget>[];
+
+    double top = widget.expandHeight - 28.0; //default top margin,
+    if (_scrollController.hasClients) {
+      top -= _scrollController.offset;
+    }
+
+    if(top<widget.expandHeight/3) {
+      list.add(IconButton(
+        icon: const Icon(Icons.print),
+        onPressed: () =>
+        {
+          debugPrint("Click on upload button")
+        },
+      ));
+    }
+
+    list.add(PopupMenuButton(
+      icon: const Icon(Icons.more_vert),
+      itemBuilder: (context) => [
+        const PopupMenuItem(
+          value: 1,
+          child: Text("Печать картинки чека от АПИ"),
+
+        ),
+        const PopupMenuItem(
+          value: 2,
+          child: Text("ИНН ФИО"),
+        ),
+      ],
+    ));
+
+    return list;
   }
 
   Widget _buildForm(){
