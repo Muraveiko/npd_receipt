@@ -7,39 +7,47 @@ import 'model/receipt.dart';
 
 class ViewScreen extends StatefulWidget {
   final double expandHeight = 240.0;
-  final String inn;
-  final String receiptId;
   final ReceiptId rId;
 
-  ViewScreen(this.inn,this.receiptId,{super.key}): rId = ReceiptId(receiptId: receiptId,inn: inn);
+  ViewScreen(String inn,String receiptId,{super.key}): rId = ReceiptId(receiptId: receiptId,inn: inn);
 
   @override
   ViewScreenState createState() => ViewScreenState();
 }
 
 class ViewScreenState extends State<ViewScreen> {
-  String fio = "";
-  ScrollController? _scrollController;
-  final Key scKey = const Key("scroll_body");
+
   final _textFieldController = TextEditingController();
+  final _scrollController = ScrollController();
+
+  Receipt? receipt;
+  InnInfo? innInfo;
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
-    _scrollController?.addListener(() => setState(() {}));
-    NpdDao.modelInn!.getInnInfo(widget.inn).listen((event) {
+
+    _scrollController.addListener(() => setState(() {}));
+
+
+    NpdDao.modelInn!.getInnInfo(widget.rId.inn!).listen((info) {
       setState(() {
-        String iFio = event?.name ?? '';
-        fio = iFio;
-        _textFieldController.text = iFio;
+        innInfo = info;
+        _textFieldController.text = innInfo?.name ?? '';
       });
+    });
+
+    NpdDao.modelReceipt!.getReceipt(widget.rId).listen((receipt) {
+      setState(() {
+        this.receipt = receipt;
+      });
+
     });
   }
 
   @override
   void dispose() {
-    _scrollController?.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -51,27 +59,7 @@ class ViewScreenState extends State<ViewScreen> {
         children: <Widget>[CustomScrollView(
         controller: _scrollController,
         slivers: <Widget>[
-              StreamBuilder(key: scKey,
-               stream:  NpdDao.modelReceipt?.getReceipt(widget.receiptId, widget.inn),
-               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                 StatelessWidget title;
-                 if (snapshot.connectionState == ConnectionState.waiting) {
-                    title = const Text("Wait");
-                 }else if (snapshot.hasError) {
-                     title = Text("Error ${snapshot.error}");
-                 }else {
-                     title = ViewHead(snapshot.data,fio);
-                 }
-                 final head = SliverAppBar(
-                   pinned: true,
-                   expandedHeight: widget.expandHeight,
-                   flexibleSpace: FlexibleSpaceBar(
-                       centerTitle: false,
-                       title: title,
-                   ),
-                 );
-                 return head;
-                }),
+              _buildHead(),
               _buildForm(),
               const SliverToBoxAdapter(child: SizedBox(height: 32,)),
 
@@ -87,6 +75,26 @@ class ViewScreenState extends State<ViewScreen> {
     ));
   }
 
+  Widget _buildHead(){
+
+          StatelessWidget title;
+          if (receipt == null) {
+            title = const Text("Wait");
+          }else {
+            title = ViewHead(receipt!,innInfo?.name ?? '');
+          }
+          final head = SliverAppBar(
+            pinned: true,
+            expandedHeight: widget.expandHeight,
+            flexibleSpace: FlexibleSpaceBar(
+              centerTitle: false,
+              title: title,
+            ),
+          );
+          return head;
+
+  }
+
   Widget _buildForm(){
     return SliverToBoxAdapter(child:Card(
         margin: const EdgeInsets.symmetric(vertical: 48.0, horizontal: 16.0),
@@ -100,7 +108,7 @@ class ViewScreenState extends State<ViewScreen> {
                Padding(
                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   child:
-                      Text('ИНН ${widget.inn}',style: const TextStyle(color: Colors.black,fontSize: 16),),
+                      Text('ИНН ${widget.rId.inn!}',style: const TextStyle(color: Colors.black,fontSize: 16),),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -123,12 +131,11 @@ class ViewScreenState extends State<ViewScreen> {
                            child: const Text('Сохранить'),
                             onPressed: () {
                               () async {
-                                await NpdDao.modelInn?.insertInnInfo(InnInfo(
-                                    inn: widget.inn,
+
+                                NpdDao.modelInn?.insertInnInfo(InnInfo(
+                                    inn: widget.rId.inn!,
                                     name: _textFieldController.text));
-                                setState(() {
-                                  fio = _textFieldController.text;
-                                });
+
                               }.call();
                      }),
                 ]),
@@ -142,8 +149,8 @@ class ViewScreenState extends State<ViewScreen> {
 
   Widget _buildFab() {
     double top = widget.expandHeight - 28.0; //default top margin,
-    if (_scrollController!.hasClients) {
-      top -= _scrollController!.offset;
+    if (_scrollController.hasClients) {
+      top -= _scrollController.offset;
     }
     if(top<24){
       top = 24;
