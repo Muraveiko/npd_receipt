@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:npd/dao/database.dart';
+import 'package:npd/model/inn_info.dart';
 import 'package:npd/model/receipt_id.dart';
 import 'model/receipt.dart';
 
@@ -17,15 +18,23 @@ class ViewScreen extends StatefulWidget {
 }
 
 class ViewScreenState extends State<ViewScreen> {
-  String fio = "------ ---- -----";
+  String fio = "";
   ScrollController? _scrollController;
   final Key scKey = const Key("scroll_body");
+  final _textFieldController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
     _scrollController?.addListener(() => setState(() {}));
+    NpdDao.modelInn!.getInnInfo(widget.inn).listen((event) {
+      setState(() {
+        String iFio = event?.name ?? '';
+        fio = iFio;
+        _textFieldController.text = iFio;
+      });
+    });
   }
 
   @override
@@ -63,7 +72,9 @@ class ViewScreenState extends State<ViewScreen> {
                  );
                  return head;
                 }),
+              _buildForm(),
               const SliverToBoxAdapter(child: SizedBox(height: 32,)),
+
               SliverToBoxAdapter(
                 child: Image.network(widget.rId.imageUrl(),
                 alignment: Alignment.topCenter,
@@ -74,6 +85,59 @@ class ViewScreenState extends State<ViewScreen> {
      _buildFab(),
     ]
     ));
+  }
+
+  Widget _buildForm(){
+    return SliverToBoxAdapter(child:Card(
+        margin: const EdgeInsets.symmetric(vertical: 48.0, horizontal: 16.0),
+        child:
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child:
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+               Padding(
+                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  child:
+                      Text('ИНН ${widget.inn}',style: const TextStyle(color: Colors.black,fontSize: 16),),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                child: TextFormField(
+                    controller: _textFieldController,
+                    decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'ФИО',
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                child: Row(mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                   ElevatedButton(
+                           style: ButtonStyle(
+                             backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
+                           ),
+                           child: const Text('Сохранить'),
+                            onPressed: () {
+                              () async {
+                                await NpdDao.modelInn?.insertInnInfo(InnInfo(
+                                    inn: widget.inn,
+                                    name: _textFieldController.text));
+                                setState(() {
+                                  fio = _textFieldController.text;
+                                });
+                              }.call();
+                     }),
+                ]),
+              ),
+            ],
+          ),
+        )
+    ),
+    );
   }
 
   Widget _buildFab() {
