@@ -158,9 +158,9 @@ class _$ModelReceipt extends ModelReceipt {
   }
 
   @override
-  Stream<Receipt?> getReceipt(String id, String inn) {
+  Stream<Receipt?> getReceiptByIdAndInn(String id, String inn) {
     return _queryAdapter.queryStream(
-        'SELECT * FROM receipt_history WHERE receiptId=?1 and inn=?2',
+        'SELECT * FROM receipt_history WHERE receiptId= ?1 and inn= ?2',
         mapper: (Map<String, Object?> row) => Receipt(
             inn: row['inn'] as String?,
             receiptId: row['receiptId'] as String?,

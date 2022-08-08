@@ -1,5 +1,6 @@
 import 'package:floor/floor.dart';
 import '../model/receipt.dart';
+import '../model/receipt_id.dart';
 
 @dao
 abstract class ModelReceipt {
@@ -18,7 +19,10 @@ abstract class ModelReceipt {
   Stream<List<Receipt>> getAllReceipt();
   // @todo сортировку обратную дате импорта
 
-  @Query("SELECT * FROM receipt_history WHERE receiptId=:id and inn=:inn")
-  Stream<Receipt?> getReceipt(String id,String inn);
+  @Query("SELECT * FROM receipt_history WHERE receiptId= :id and inn= :inn")
+  Stream<Receipt?> getReceiptByIdAndInn(String id, String inn);
 
+  Stream<Receipt?> getReceipt(ReceiptId rId){
+    return getReceiptByIdAndInn(rId.receiptId!, rId.inn!);
+  }
 }
