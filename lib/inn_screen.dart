@@ -1,15 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:npd/dao/database.dart';
 import 'generated/l10n.dart';
 import 'model/inn_info.dart';
 
-const _chars = '1234567890AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz';
-Random _rnd = Random();
-
-String getRandomString(int length, {int fromMax = _chars.length}) => String.fromCharCodes(Iterable.generate(
-    length, (_) => _chars.codeUnitAt(_rnd.nextInt(fromMax))));
 
 class InnScreen extends StatefulWidget {
   const InnScreen({Key? key}) : super(key: key);
@@ -29,13 +22,6 @@ class InnScreenState extends State<InnScreen> {
               .of(context)
               .taxomy_inn),
           actions: [
-            IconButton(
-              icon: const Icon(Icons.plus_one),
-              onPressed: () {
-                final innInfo = InnInfo(inn:getRandomString(12,fromMax: 10),name:getRandomString(16));
-                NpdDao.modelInn?.insertInnInfo(innInfo);
-              },
-            ),
             IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () {
