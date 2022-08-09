@@ -45,6 +45,7 @@ class HistoryScreenState extends State<HistoryScreen> {
             child: const Icon(Icons.add_shopping_cart_rounded),
             onPressed: () {
                 showDialog(context: context,
+                    barrierDismissible: false,
                     builder: (context) => AlertDialog(
                       title: const Text('Ссылка на чек'),
                       content: Form(key: _formKey,child:
