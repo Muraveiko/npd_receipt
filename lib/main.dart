@@ -1,9 +1,11 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:npd/dao/database.dart';
 import 'package:npd/history_screen.dart';
 import 'package:npd/settings_screen.dart';
 import 'package:npd/view_screen.dart';
+import 'package:window_size/window_size.dart';
 import 'generated/l10n.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'how_use_screen.dart';
@@ -12,6 +14,14 @@ import 'licenses_screen.dart';
 
 Future<void> main() async {
     WidgetsFlutterBinding.ensureInitialized();
+
+
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      setWindowTitle('Чек НПД');
+      setWindowMinSize(const Size(320, 480));
+      setWindowMaxSize(const Size(640, 1024));
+      setWindowFrame(const Rect.fromLTRB(100.0, 100.0, 580.0, 900.0));
+    }
 
      await Settings.init(
        cacheProvider: SharePreferenceCache(),
