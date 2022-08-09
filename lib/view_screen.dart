@@ -245,8 +245,9 @@ class MultiLinesTitle extends StatelessWidget {
           Positioned(
             bottom: 56,
             child: Text(fio,
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.normal),),
-          ),
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.normal),),
+              ),
           Positioned(
             bottom: 70,
             child: Text('ИНН ${receipt.inn!}',
