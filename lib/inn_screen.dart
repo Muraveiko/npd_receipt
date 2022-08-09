@@ -52,28 +52,48 @@ class InnInfoListItem extends StatelessWidget{
   Widget build(BuildContext context) {
     return Dismissible(
       key:Key(model.inn??""),
+      direction: DismissDirection.endToStart,
       onDismissed: (direction){
         NpdDao.modelInn?.deleteInnInfo(model);
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Запись удалена')
             ));
       },
-      child:
-          Card(
-            margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 12.0),
-            child:
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child:
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                       children: <Widget>[
-                         Text(model.inn!,style: const TextStyle(color: Colors.green,fontSize: 16),),
-                         Text(model.name??"Не введено"),
-                  ],
-              ),
-                )
+      background:
+      Padding(padding: const EdgeInsets.all(8.0),
+        child:
+        Container(
+          alignment: AlignmentDirectional.centerEnd,
+          color: Theme.of(context).colorScheme.secondaryContainer,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
+            child: Icon(Icons.delete,
+              color: Theme.of(context).colorScheme.onSecondaryContainer,
+            ),
           ),
+        ),
+      ),
+      child:
+          Padding(padding: const EdgeInsets.all(8.0),child: Card(
+              margin: const EdgeInsets.all(0.0),
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                  side:  BorderSide(color: Theme.of(context).dividerColor,width: 1),
+                  borderRadius: const BorderRadius.all(Radius.circular(2))
+              ),
+              child:
+                    Column(
+                       crossAxisAlignment: CrossAxisAlignment.start,
+                       children: <Widget>[
+                         const SizedBox(width: double.infinity,), // распорка для ширины
+                         Padding(padding: const EdgeInsets.fromLTRB(12.0,8.0,12.0,8.0), child:
+                            Text(model.inn!,style: TextStyle(color: Theme.of(context).primaryColor,fontSize: 16, fontWeight: FontWeight.bold),)),
+                         Padding(padding: const EdgeInsets.fromLTRB(12.0,8.0,12.0,8.0), child:
+                            Text(model.name??"Не введено"),),
+                       ],
+                   ),
+
+          ), ),
     );
   }
 }

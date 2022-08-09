@@ -10,7 +10,7 @@ class LicensesScreen extends StatelessWidget {
         .textTheme
         .apply(displayColor: Theme.of(context).colorScheme.onSurface);
 
-    const linkStyle = TextStyle(color: Colors.green);
+    final linkStyle = TextStyle(color: Theme.of(context).primaryColor);
 
     return Scaffold(
         appBar: AppBar(
@@ -33,7 +33,7 @@ class LicensesScreen extends StatelessWidget {
             Text('Commercial usage: Allowed',
                 style: textTheme.bodyText1!),
             InkWell(
-                child: const Text('Free for public use with a link to http://www.aha-soft.com',style: linkStyle),
+                child: Text('Free for public use with a link to http://www.aha-soft.com',style: linkStyle),
                 onTap: () => launchUrl(Uri.parse('http://www.aha-soft.com'))
             ),
 

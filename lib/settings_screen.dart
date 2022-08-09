@@ -8,8 +8,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
-import 'inn_screen.dart';
-import 'licenses_screen.dart';
 
 class NpdSettingsScreen extends StatefulWidget {
   const NpdSettingsScreen({Key? key}) : super(key: key);

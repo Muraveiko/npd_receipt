@@ -44,15 +44,15 @@ class NpdDrawer extends StatelessWidget {
         SizedBox(
         height: 180.0,
         child: DrawerHeader(
-            decoration: const BoxDecoration(color: Colors.orange),
+          decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondary),
             child: Column(children: [
               const Image(image: AssetImage('assets/images/logo.png'), height: 96),
               const SizedBox(width: 1, height: 4),
               Text(S.of(context).nav_header_title,
-                style: const TextStyle(color: Colors.white, fontSize: 16),
+                style: TextStyle(color: Theme.of(context).colorScheme.onSecondary, fontSize: 16),
               ),
               Text(S.of(context).nav_header_subtitle,
-                style: const TextStyle(color: Colors.white, fontSize:14),
+                style: TextStyle(color: Theme.of(context).colorScheme.onSecondary, fontSize:14),
               ),
             ]),
            ),

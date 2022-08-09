@@ -39,6 +39,11 @@ class NpdApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = ThemeData.from(colorScheme: ColorScheme.fromSeed(
+        seedColor: const Color(0xFF1d3517),
+        primary: const Color(0xFF1d3517),
+    ));
+
     return MaterialApp(
       localizationsDelegates: const [
         S.delegate,
@@ -49,14 +54,13 @@ class NpdApp extends StatelessWidget {
       supportedLocales: S.delegate.supportedLocales,
       onGenerateTitle: (context) => S.of(context).app_name,  // вариант локализованного заголовка
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          primarySwatch: Colors.green,
-          primaryColor: const Color(0xff001000),
-          primaryIconTheme: const IconThemeData(color: Colors.black),
-          primaryTextTheme:
-              const TextTheme(bodyText1: TextStyle(color: Colors.black)),
-          textTheme:
-              const TextTheme(bodyText1: TextStyle(color: Color(0xff001000)))),
+      theme: theme.copyWith(
+        colorScheme: theme.colorScheme.copyWith(
+            secondary: const Color(0xFFf6842c),
+            secondaryContainer: const Color(0xFFbd5500),
+            onSecondaryContainer: Colors.white,
+        ),
+      ),
       initialRoute: '/',
       routes: {
         '/': (context) => const HowUseScreen(),

@@ -41,7 +41,6 @@ class HistoryScreenState extends State<HistoryScreen> {
         ),
         drawer: const NpdDrawer(),
         floatingActionButton: FloatingActionButton(
-            backgroundColor: Colors.orange,
             child: const Icon(Icons.add_shopping_cart_rounded),
             onPressed: () {
                 showDialog(context: context,
@@ -142,11 +141,11 @@ class ReceiptListItem extends StatelessWidget{
               child:
                Container(
                  alignment: AlignmentDirectional.centerEnd,
-                 color: Colors.orange,
-                 child: const Padding(
-                    padding: EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
+                 color: Theme.of(context).colorScheme.secondaryContainer,
+                 child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
                      child: Icon(Icons.delete,
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.onSecondaryContainer,
                       ),
                  ),
                ),
@@ -160,9 +159,9 @@ class ReceiptListItem extends StatelessWidget{
                     child:Card(
                       margin: const EdgeInsets.all(0.0),
                       elevation: 0,
-                      shape: const RoundedRectangleBorder(
-                          side:  BorderSide(color: Colors.black12,width: 1),
-                          borderRadius: BorderRadius.all(Radius.circular(2))
+                      shape: RoundedRectangleBorder(
+                          side:  BorderSide(color: Theme.of(context).dividerColor,width: 1),
+                          borderRadius: const BorderRadius.all(Radius.circular(2))
                       ),
                       child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -175,7 +174,7 @@ class ReceiptListItem extends StatelessWidget{
                                     Text(formatDate.format(model!.operationTime!),
                                          style: const TextStyle(color: Colors.black54,fontSize: 13)),
                                     Text(formatPrice.format(model?.totalAmount),
-                                        style: const TextStyle(color: Colors.orange,fontSize: 18)),
+                                        style: TextStyle(color: Theme.of(context).colorScheme.secondary,fontSize: 18)),
                               ]),
                               Padding(padding: const EdgeInsets.fromLTRB(0,8.0,0,8.0),
                                   child:

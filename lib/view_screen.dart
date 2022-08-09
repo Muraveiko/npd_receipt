@@ -161,7 +161,7 @@ class ViewScreenState extends State<ViewScreen> {
                Padding(
                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   child:
-                      Text('ИНН ${widget.rId.inn!}',style: const TextStyle(color: Colors.black,fontSize: 16),),
+                      Text('ИНН ${widget.rId.inn!}',style: const TextStyle(fontSize: 16),),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -179,7 +179,7 @@ class ViewScreenState extends State<ViewScreen> {
                 children: [
                    ElevatedButton(
                            style: ButtonStyle(
-                             backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
+                             backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.secondary),
                            ),
                            child: const Text('Сохранить'),
                             onPressed: () {
@@ -215,7 +215,7 @@ class ViewScreenState extends State<ViewScreen> {
         onPressed: () => {
           debugPrint("PRINT CHECK")
         },
-        backgroundColor: Colors.orange,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         child: const Icon(Icons.print),
       ),
     );
