@@ -47,7 +47,7 @@ class NpdApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: S.delegate.supportedLocales,
-      title: 'aaa',
+      onGenerateTitle: (context) => S.of(context).app_name,  // вариант локализованного заголовка
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primarySwatch: Colors.green,
