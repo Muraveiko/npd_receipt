@@ -43,7 +43,7 @@ class NpdDrawer extends StatelessWidget {
         padding: const EdgeInsets.all(0.0),
         children: [
         SizedBox(
-        height: 210.0,
+        height: 220.0,
         child: DrawerHeader(
           decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondary),
             child: Column(children: [
