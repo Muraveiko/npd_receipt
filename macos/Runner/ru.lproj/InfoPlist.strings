@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by Oleg on 10.08.2022.
+  
+*/
+
+"CFBundleName" = "Чек НПД";
+"CFBundleDisplayName" = "Печать чека";
