@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:npd/dao/database.dart';
 import 'package:npd/model/inn_info.dart';
 import 'package:npd/model/receipt_id.dart';
@@ -69,7 +70,11 @@ class ViewScreenState extends State<ViewScreen> {
 
               SliverToBoxAdapter(
                 child: Image.network(widget.rId.imageUrl(),
-                alignment: Alignment.topCenter,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(child: SvgPicture.asset('assets/images/hourglass.svg'));
+                  },
+                  alignment: Alignment.topCenter,
               )
            ),
            ]

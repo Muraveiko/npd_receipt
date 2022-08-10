@@ -52,6 +52,7 @@ dependencies:
       url: https://github.com/google/flutter-desktop-embedding.git
       path: plugins/window_size
 
+  flutter_svg: 1.1.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -94,6 +95,7 @@ flutter:
      - assets/images/rawbt_play.webp
      - assets/images/select_my.webp
      - assets/images/logo.png
+     - assets/images/hourglass.svg
 
 
 
