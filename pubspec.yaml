@@ -76,7 +76,7 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # MY
-  flutter_launcher_icons: "^0.9.3"
+  flutter_launcher_icons: "^0.10.0"
 
 # The following section is specific to Flutter packages.
 flutter:
@@ -132,4 +132,10 @@ flutter_intl:
 flutter_icons:
   android: true
   ios: true
-  image_path: "images/logo.png"
+  remove_alpha_ios: true
+  macos: true
+  windows:
+    generate: true
+    icon_size: 256
+  image_path: "assets/images/logo.png"
+  image_path_ios: "assets/images/logo_white.png"
