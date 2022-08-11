@@ -1,16 +1,21 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:npd/dao/database.dart';
 import 'package:npd/history_screen.dart';
+import 'package:npd/model/receipt.dart';
 import 'package:npd/settings_screen.dart';
 import 'package:npd/view_screen.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:window_size/window_size.dart';
+import 'api_npd.dart';
 import 'generated/l10n.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'how_use_screen.dart';
 import 'inn_screen.dart';
 import 'licenses_screen.dart';
+import 'model/receipt_id.dart';
 
 Future<void> main() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -31,10 +36,50 @@ Future<void> main() async {
      runApp(const NpdApp());
 }
 
+class NpdApp extends StatefulWidget {
+
+  const NpdApp({Key? key}) : super(key: key);
+
+  @override
+  NpdAppState createState() => NpdAppState();
+
+}
 
 
-class NpdApp extends StatelessWidget {
-  const NpdApp({super.key});
+class NpdAppState extends State<NpdApp> {
+  StreamSubscription? _intentDataStreamSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // For sharing or opening urls/text coming from outside the app while the app is in the memory
+    _intentDataStreamSubscription =
+        ReceiveSharingIntent.getTextStream().listen((String value) {
+          importReceipt(value).then((receipt) => {
+            if(receipt != null){
+              //  Navigator.of(context).pushNamed("/view/${receipt.inn}/${receipt.receiptId}")
+            }
+          });
+        }, onError: (err) {
+          debugPrint("getLinkStream error: $err");
+        });
+
+    // For sharing or opening urls/text coming from outside the app while the app is closed
+    ReceiveSharingIntent.getInitialText().then((String? value) {
+      importReceipt(value).then((receipt) => {
+         if(receipt != null){
+            //  Navigator.of(context).pushNamed("/view/${receipt.inn}/${receipt.receiptId}")
+          }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _intentDataStreamSubscription?.cancel();
+    super.dispose();
+  }
 
   // This widget is the root of your application.
   @override
@@ -77,7 +122,29 @@ class NpdApp extends StatelessWidget {
               settings: routeSettings
           );
         }
+        return null;
       },
     );
+  }
+
+  Future<Receipt?> importReceipt(String? url) async {
+    if(url == null) return null;
+    try {
+      final error = ReceiptId.validateUrl(url);
+      if(error != null){
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(error.toString()))
+        );
+        return null;
+      }
+      var receipt = await NpdAPI.getFromApi(url);
+      await NpdDao.modelReceipt?.insertReceipt(receipt);
+      return receipt;
+    }catch(error){
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error.toString()))
+      );
+    }
+    return null;
   }
 }
