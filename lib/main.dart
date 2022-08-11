@@ -47,6 +47,7 @@ class NpdApp extends StatefulWidget {
 
 
 class NpdAppState extends State<NpdApp> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   StreamSubscription? _intentDataStreamSubscription;
 
   @override
@@ -56,9 +57,9 @@ class NpdAppState extends State<NpdApp> {
     // For sharing or opening urls/text coming from outside the app while the app is in the memory
     _intentDataStreamSubscription =
         ReceiveSharingIntent.getTextStream().listen((String value) {
-          importReceipt(value).then((receipt) => {
+          importReceipt(value).then((receipt){
             if(receipt != null){
-              //  Navigator.of(context).pushNamed("/view/${receipt.inn}/${receipt.receiptId}")
+              navigatorKey.currentState!.pushNamed("/view/${receipt.inn}/${receipt.receiptId}");
             }
           });
         }, onError: (err) {
@@ -67,9 +68,9 @@ class NpdAppState extends State<NpdApp> {
 
     // For sharing or opening urls/text coming from outside the app while the app is closed
     ReceiveSharingIntent.getInitialText().then((String? value) {
-      importReceipt(value).then((receipt) => {
+      importReceipt(value).then((receipt){
          if(receipt != null){
-            //  Navigator.of(context).pushNamed("/view/${receipt.inn}/${receipt.receiptId}")
+             navigatorKey.currentState!.pushNamed("/view/${receipt.inn}/${receipt.receiptId}");
           }
       });
     });
@@ -124,6 +125,7 @@ class NpdAppState extends State<NpdApp> {
         }
         return null;
       },
+      navigatorKey: navigatorKey,
     );
   }
 
