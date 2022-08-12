@@ -131,6 +131,7 @@ class NpdAppState extends State<NpdApp> {
 
   Future<Receipt?> importReceipt(String? url) async {
     if(url == null) return null;
+    debugPrint("import url");
     try {
       final error = ReceiptId.validateUrl(url);
       if(error != null){
