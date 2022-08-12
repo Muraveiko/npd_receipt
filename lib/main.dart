@@ -4,18 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:npd/dao/database.dart';
 import 'package:npd/history_screen.dart';
-import 'package:npd/model/receipt.dart';
 import 'package:npd/settings_screen.dart';
 import 'package:npd/view_screen.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:window_size/window_size.dart';
-import 'api_npd.dart';
 import 'generated/l10n.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'how_use_screen.dart';
+import 'import_screen.dart';
 import 'inn_screen.dart';
 import 'licenses_screen.dart';
-import 'model/receipt_id.dart';
 
 Future<void> main() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -33,12 +31,15 @@ Future<void> main() async {
      );
      await NpdDao.init();
 
-     runApp(const NpdApp());
+    // For sharing or opening urls/text coming from outside the app while the app is closed
+    final importUrl = await ReceiveSharingIntent.getInitialText() ?? '';
+
+    runApp(NpdApp(importUrl));
 }
 
 class NpdApp extends StatefulWidget {
-
-  const NpdApp({Key? key}) : super(key: key);
+  String importUrl;
+  NpdApp(this.importUrl,{Key? key}) : super(key: key);
 
   @override
   NpdAppState createState() => NpdAppState();
@@ -47,8 +48,8 @@ class NpdApp extends StatefulWidget {
 
 
 class NpdAppState extends State<NpdApp> {
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   StreamSubscription? _intentDataStreamSubscription;
+
 
   @override
   void initState() {
@@ -56,24 +57,14 @@ class NpdAppState extends State<NpdApp> {
 
     // For sharing or opening urls/text coming from outside the app while the app is in the memory
     _intentDataStreamSubscription =
-        ReceiveSharingIntent.getTextStream().listen((String value) {
-          importReceipt(value).then((receipt){
-            if(receipt != null){
-              navigatorKey.currentState!.pushNamed("/view/${receipt.inn}/${receipt.receiptId}");
-            }
-          });
-        }, onError: (err) {
-          debugPrint("getLinkStream error: $err");
+        ReceiveSharingIntent.getTextStream().listen((value){
+           setState(() {
+             widget.importUrl = value;
+           });
+          }, onError: (err) {
+            debugPrint("getLinkStream error: $err");
         });
 
-    // For sharing or opening urls/text coming from outside the app while the app is closed
-    ReceiveSharingIntent.getInitialText().then((String? value) {
-      importReceipt(value).then((receipt){
-         if(receipt != null){
-             navigatorKey.currentState!.pushNamed("/view/${receipt.inn}/${receipt.receiptId}");
-          }
-      });
-    });
   }
 
   @override
@@ -85,12 +76,42 @@ class NpdAppState extends State<NpdApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = ThemeData.from(colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color(0xFF1d3517),
-        primary: const Color(0xFF1d3517),
+
+    ThemeData theme = ThemeData.from(colorScheme: ColorScheme.fromSeed(
+      seedColor: const Color(0xFF1d3517),
+      primary: const Color(0xFF1d3517),
     ));
+    theme = theme.copyWith(
+      colorScheme: theme.colorScheme.copyWith(
+        secondary: const Color(0xFFf6842c),
+        secondaryContainer: const Color(0xFFbd5500),
+        onSecondaryContainer: Colors.white,
+      ),
+    );
+
+    // для обработки "Поделиться"
+
+    if (widget.importUrl.length>5){
+      return MaterialApp(
+        key: Key("import${widget.importUrl}"),
+        localizationsDelegates: const [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
+        onGenerateTitle: (context) => S.of(context).app_name,
+        debugShowCheckedModeBanner: false,
+        theme: theme,
+        home: ImportScreen(widget.importUrl),
+      );
+   }
+
+    // обычный запуск
 
     return MaterialApp(
+      key: const Key("normal"),
       localizationsDelegates: const [
         S.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -98,56 +119,30 @@ class NpdAppState extends State<NpdApp> {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: S.delegate.supportedLocales,
-      onGenerateTitle: (context) => S.of(context).app_name,  // вариант локализованного заголовка
+      onGenerateTitle: (context) => S.of(context).app_name,
+      // вариант локализованного заголовка
       debugShowCheckedModeBanner: false,
-      theme: theme.copyWith(
-        colorScheme: theme.colorScheme.copyWith(
-            secondary: const Color(0xFFf6842c),
-            secondaryContainer: const Color(0xFFbd5500),
-            onSecondaryContainer: Colors.white,
-        ),
-      ),
-      initialRoute: '/',
+      theme: theme,
       routes: {
-        '/': (context) => const HowUseScreen(),
-        '/history': (context) => const HistoryScreen(),
-        '/settings': (context) => const NpdSettingsScreen(),
-        '/inn': (context) => const InnScreen(),
-        '/licenses': (context) => const LicensesScreen(),
+         '/': (context) =>  const HowUseScreen() ,
+          '/history': (context) => const HistoryScreen(),
+          '/settings': (context) => const NpdSettingsScreen(),
+          '/inn': (context) => const InnScreen(),
+          '/licenses': (context) => const LicensesScreen(),
       },
       onGenerateRoute: (routeSettings) {
         var path = routeSettings.name?.split('/');
-        if(path?[1] == 'view'){
+        if (path?[1] == 'view') {
           return MaterialPageRoute(
-              builder: (context) => ViewScreen(path![2],path[3]),
+              builder: (context) => ViewScreen(path![2], path[3]),
               settings: routeSettings
           );
         }
         return null;
       },
-      navigatorKey: navigatorKey,
     );
+
   }
 
-  Future<Receipt?> importReceipt(String? url) async {
-    if(url == null) return null;
-    debugPrint("import url");
-    try {
-      final error = ReceiptId.validateUrl(url);
-      if(error != null){
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(error.toString()))
-        );
-        return null;
-      }
-      var receipt = await NpdAPI.getFromApi(url);
-      await NpdDao.modelReceipt?.insertReceipt(receipt);
-      return receipt;
-    }catch(error){
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(error.toString()))
-      );
-    }
-    return null;
-  }
+
 }

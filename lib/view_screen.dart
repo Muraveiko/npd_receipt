@@ -1,4 +1,9 @@
+
+
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:npd/dao/database.dart';
 import 'package:npd/model/inn_info.dart';
@@ -9,8 +14,11 @@ import 'model/receipt.dart';
 class ViewScreen extends StatefulWidget {
   final double expandHeight = 240.0;
   final ReceiptId rId;
+  final bool isForceClose;
 
-  ViewScreen(String inn,String receiptId,{super.key}): rId = ReceiptId(receiptId: receiptId,inn: inn);
+  ViewScreen(String inn,String receiptId,{super.key}): isForceClose = false, rId = ReceiptId(receiptId: receiptId,inn: inn);
+
+  ViewScreen.withClose(String inn,String receiptId,{super.key}): isForceClose = true, rId = ReceiptId(receiptId: receiptId,inn: inn);
 
   @override
   ViewScreenState createState() => ViewScreenState();
@@ -92,16 +100,32 @@ class ViewScreenState extends State<ViewScreen> {
           }else {
             title = MultiLinesTitle(receipt!,innInfo?.name ?? '');
           }
-          final head = SliverAppBar(
-            pinned: true,
-            expandedHeight: widget.expandHeight,
-            flexibleSpace: FlexibleSpaceBar(
-              centerTitle: false,
-              title: title,
-            ),
-            actions: _buildActions(),
-          );
-          return head;
+
+          if(widget.isForceClose){
+            return SliverAppBar(
+               leading: IconButton(
+                   icon: const Icon(Icons.arrow_back),
+                        onPressed: () => _closeApp(),
+              ),
+              pinned: true,
+              expandedHeight: widget.expandHeight,
+              flexibleSpace: FlexibleSpaceBar(
+                centerTitle: false,
+                title: title,
+              ),
+              actions: _buildActions(),
+            );
+          }else {
+            return SliverAppBar(
+              pinned: true,
+              expandedHeight: widget.expandHeight,
+              flexibleSpace: FlexibleSpaceBar(
+                centerTitle: false,
+                title: title,
+              ),
+              actions: _buildActions(),
+            );
+          }
 
   }
 
@@ -224,6 +248,14 @@ class ViewScreenState extends State<ViewScreen> {
         child: const Icon(Icons.print),
       ),
     );
+  }
+
+  void _closeApp() {
+    if (Platform.isAndroid) {
+      SystemNavigator.pop();
+    } else {
+      exit(0);
+    }
   }
 }
 
