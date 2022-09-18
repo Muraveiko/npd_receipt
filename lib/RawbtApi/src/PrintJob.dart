@@ -1,5 +1,10 @@
 
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:flutter/services.dart';
 import 'package:npd/RawbtApi/src/Constants.dart';
+import 'package:npd/RawbtApi/src/command/CommandImageInBase64.dart';
 
 import 'attributes/AttributesBarcode.dart';
 import 'attributes/AttributesQRcode.dart';
@@ -118,8 +123,30 @@ class PrintJob {
 
   // ========= картинка =================
 
-  // todo возможность послать картинку
 
+  void imageInBase64(String b64) {
+     commands.add(CommandImageInBase64(b64,attributesImage: getDefaultAttrImage()));
+  }
+
+  void imageInBase64WithAttr(String b64,AttributesImage attr) {
+    commands.add(CommandImageInBase64(b64,attributesImage: attr));
+  }
+
+  Future imageFromNetwork(String url) async{
+    var b = await _readNetworkImage(url);
+    commands.add(CommandImageInBase64(base64Encode(b),attributesImage: getDefaultAttrImage()));
+  }
+
+  Future imageFromNetworkWithAttr(String url, AttributesImage attr) async{
+    var b = await _readNetworkImage(url);
+    commands.add(CommandImageInBase64(base64Encode(b),attributesImage: attr));
+  }
+
+  // Reading bytes from a network image
+  Future<Uint8List> _readNetworkImage(String imageUrl) async {
+    final ByteData data = await NetworkAssetBundle(Uri.parse(imageUrl)).load(imageUrl);
+    return data.buffer.asUint8List();
+  }
 
   // ============== bytes =====================
 

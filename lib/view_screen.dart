@@ -161,7 +161,7 @@ class ViewScreenState extends State<ViewScreen> {
       ],
       onSelected: (value) {
         if (value == 1) {
-          debugPrint("PRINT IMAGE");
+          printImage();
         } else if (value == 2) {
           setState(() {
             isShowForm = true;
@@ -257,7 +257,7 @@ class ViewScreenState extends State<ViewScreen> {
     }
   }
 
-  void printCheck() {
+  void printCheck() async {
     if (innInfo == null) {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("Введите ФИО")));
@@ -456,8 +456,32 @@ class ViewScreenState extends State<ViewScreen> {
     );
     job.qrcode(widget.rId.imageUrl(),attributesQRcode);
 
+    // вызов апи
     RawbtApi.printJob(job);
   }
+
+  void printImage() async {
+
+
+
+    // задание
+    var job = PrintJob();
+    job.idJob = receipt!.receiptId;
+
+    // настройки
+    job.copies = Settings.getValue("copies", defaultValue: 1)!;
+
+    // картинка
+    await job.imageFromNetwork(widget.rId.imageUrl());
+
+    // вызов апи
+    RawbtApi.printJob(job);
+
+
+  }
+
+
+
 }
 
 class MultiLinesTitle extends StatelessWidget {
