@@ -26,7 +26,7 @@ class Receipt {
   // ======================= не храним в базе данных как отдельные поля =============
   /// Дата расчёта
   @ignore
-  DateTime? operationTime;
+  DateTime? operationTime; // todo timezone
 
   /// Список услуг
  @ignore

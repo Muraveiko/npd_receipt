@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:npd/RawbtApi/rawbt_api.dart';
 import 'package:npd/dao/database.dart';
 import 'package:npd/history_screen.dart';
 import 'package:npd/settings_screen.dart';
@@ -30,6 +31,8 @@ Future<void> main() async {
        cacheProvider: SharePreferenceCache(),
      );
      await NpdDao.init();
+
+     await RawbtApi.init();
 
     // For sharing or opening urls/text coming from outside the app while the app is closed
     final importUrl = await ReceiveSharingIntent.getInitialText() ?? '';
