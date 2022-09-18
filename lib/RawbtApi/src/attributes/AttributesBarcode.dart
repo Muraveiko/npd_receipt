@@ -98,7 +98,62 @@ class AttributesBarcode {
         this.alignment = _alignment,
     }): type = Constant.BARCODE_CODE128;
 
-    // todo остальные типы
+    const AttributesBarcode.itf({
+        this.hri = _hri,
+        this.font = _font,
+        this.height = _height,
+        this.width = _width,
+        this.alignment = _alignment,
+    }): type = Constant.BARCODE_ITF;
+
+    const AttributesBarcode.codabar({
+        this.hri = _hri,
+        this.font = _font,
+        this.height = _height,
+        this.width = _width,
+        this.alignment = _alignment,
+    }): type = Constant.BARCODE_CODABAR;
+
+    const AttributesBarcode.gs1_128({
+        this.hri = _hri,
+        this.font = _font,
+        this.height = _height,
+        this.width = _width,
+        this.alignment = _alignment,
+    }): type = Constant.BARCODE_GS1_128;
+
+    const AttributesBarcode.gs1DatabarExpanded({
+        this.hri = _hri,
+        this.font = _font,
+        this.height = _height,
+        this.width = _width,
+        this.alignment = _alignment,
+    }): type = Constant.BARCODE_GS1_DATABAR_EXPANDED;
+
+    const AttributesBarcode.gs1DatabarLimited({
+        this.hri = _hri,
+        this.font = _font,
+        this.height = _height,
+        this.width = _width,
+        this.alignment = _alignment,
+    }): type = Constant.BARCODE_GS1_DATABAR_LIMITED;
+
+    const AttributesBarcode.gs1DatabarOmniDirectional({
+        this.hri = _hri,
+        this.font = _font,
+        this.height = _height,
+        this.width = _width,
+        this.alignment = _alignment,
+    }): type = Constant.BARCODE_GS1_DATABAR_OMNIDIRECTIONAL;
+
+    const AttributesBarcode.gs1DatabarTruncated({
+        this.hri = _hri,
+        this.font = _font,
+        this.height = _height,
+        this.width = _width,
+        this.alignment = _alignment,
+    }): type = Constant.BARCODE_GS1_DATABAR_TRUNCATED;
+
 
     Map<String, dynamic> toJson() => {
         'type':type,

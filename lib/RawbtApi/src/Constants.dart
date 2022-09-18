@@ -40,7 +40,6 @@ class Constant {
   static const String BARCODE_CODE39 = "code39";
   static const String BARCODE_CODE93 = "code93";
   static const String BARCODE_CODE128 = "code128";
-
   static const String BARCODE_ITF = "itf";
   static const String BARCODE_CODABAR = "codabar";
   static const String BARCODE_GS1_128 = "gs1_128";
