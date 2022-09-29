@@ -32,7 +32,7 @@ Future<void> main() async {
      );
      await NpdDao.init();
 
-     await RawbtApi.init();
+     await RawbtApi().connect();
 
     // For sharing or opening urls/text coming from outside the app while the app is closed
     final importUrl = await ReceiveSharingIntent.getInitialText() ?? '';

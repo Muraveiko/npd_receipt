@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -73,28 +72,73 @@ class ViewScreenState extends State<ViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final textTheme = Theme.of(context)
+        .textTheme
+        .apply(displayColor: Theme.of(context).colorScheme.onSurface);
+
+    return Stack(children: <Widget>[Scaffold(
         body: Stack(children: <Widget>[
-      CustomScrollView(controller: _scrollController, slivers: <Widget>[
-        _buildHead(),
-        _buildForm(),
-        const SliverToBoxAdapter(
-            child: SizedBox(
-          height: 32,
-        )),
-        SliverToBoxAdapter(
-            child: Image.network(
-          widget.rId.imageUrl(),
-          loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress == null) return child;
-            return Center(
-                child: SvgPicture.asset('assets/images/hourglass.svg'));
-          },
-          alignment: Alignment.topCenter,
-        )),
-      ]),
-      _buildFab(),
-    ]));
+          CustomScrollView(controller: _scrollController, slivers: <Widget>[
+            _buildHead(),
+            _buildForm(),
+            const SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 32,
+                )),
+            SliverToBoxAdapter(
+                child: Image.network(
+                  widget.rId.imageUrl(),
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                        child: SvgPicture.asset('assets/images/hourglass.svg'));
+                  },
+                  errorBuilder: (context, exception, stackTrace) {
+                    return const Center(
+                        child: Text("Не удалось загрузить изображение"));
+                  },
+                  alignment: Alignment.topCenter,
+                )),
+          ]),
+          _buildFab(),
+        ])
+    ),
+      StreamBuilder(
+          stream: RawbtApi().isPrint,
+          initialData: false,
+          builder: (context,AsyncSnapshot snapshot){
+            bool isPrint = snapshot.data;
+            return isPrint ? Container(
+              color: Colors.black.withOpacity(0.5),
+              child: Center(
+                child: Card(
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child:Text('Печать',
+                                style: textTheme.titleLarge)
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
+                          child: StreamBuilder(
+                            stream: RawbtApi().progressStream,
+                            initialData: 0,
+                            builder: (context,snapshot){
+                              return Text("Прогресс ${snapshot.data}%");
+                            },
+                          ),
+                        ),
+                      ]
+                  ),
+                ),
+              ),
+            ) : Container();
+          }),
+
+    ]
+    );
   }
 
   Widget _buildHead() {
@@ -149,7 +193,8 @@ class ViewScreenState extends State<ViewScreen> {
 
     list.add(PopupMenuButton(
       icon: const Icon(Icons.more_vert),
-      itemBuilder: (context) => [
+      itemBuilder: (context) =>
+      [
         const PopupMenuItem(
           value: 1,
           child: Text("Печать картинки чека от АПИ"),
@@ -187,7 +232,7 @@ class ViewScreenState extends State<ViewScreen> {
               children: <Widget>[
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   child: Text(
                     'ИНН ${widget.rId.inn!}',
                     style: const TextStyle(fontSize: 16),
@@ -195,7 +240,7 @@ class ViewScreenState extends State<ViewScreen> {
                 ),
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   child: TextFormField(
                     controller: _textFieldController,
                     decoration: const InputDecoration(
@@ -206,17 +251,20 @@ class ViewScreenState extends State<ViewScreen> {
                 ),
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
                   child:
-                      Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                     ElevatedButton(
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
-                              Theme.of(context).colorScheme.secondary),
+                              Theme
+                                  .of(context)
+                                  .colorScheme
+                                  .secondary),
                         ),
                         child: const Text('Сохранить'),
                         onPressed: () {
-                          () async {
+                              () async {
                             NpdDao.modelInn?.insertInnInfo(InnInfo(
                                 inn: widget.rId.inn!,
                                 name: _textFieldController.text));
@@ -243,7 +291,10 @@ class ViewScreenState extends State<ViewScreen> {
       right: 16.0,
       child: FloatingActionButton(
         onPressed: () => {printCheck()},
-        backgroundColor: Theme.of(context).colorScheme.secondary,
+        backgroundColor: Theme
+            .of(context)
+            .colorScheme
+            .secondary,
         child: const Icon(Icons.print),
       ),
     );
@@ -258,6 +309,7 @@ class ViewScreenState extends State<ViewScreen> {
   }
 
   void printCheck() async {
+
     if (innInfo == null) {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("Введите ФИО")));
@@ -266,13 +318,12 @@ class ViewScreenState extends State<ViewScreen> {
     Receipt receipt = Receipt.fromStringJSON(this.receipt!.sourceJson!);
 
     // форматирование данных чека
-    final formatPrice = NumberFormat.currency(locale:"ru_RU");
+    final formatPrice = NumberFormat.currency(locale: "ru_RU");
     final formatDate = DateFormat('d.MM.yyyy', "ru_RU");
     final formatTime = DateFormat('HH:mm:ss', "ru_RU");
 
     String ch = Settings.getValue("delimiterChar", defaultValue: "-")!;
-    String ch2 =
-        Settings.getValue("delimiterAmountChar", defaultValue: "=")!;
+    String ch2 = Settings.getValue("delimiterAmountChar", defaultValue: "=")!;
 
     // задание на печать
     PrintJob job = PrintJob();
@@ -287,7 +338,7 @@ class ViewScreenState extends State<ViewScreen> {
 
     // чек номер
     bool height2Number =
-        Settings.getValue("height2Number", defaultValue: true)!;
+    Settings.getValue("height2Number", defaultValue: true)!;
 
     AttributesString attrStrTitle = AttributesString(
         alignment: Constant.ALIGNMENT_CENTER,
@@ -315,24 +366,25 @@ class ViewScreenState extends State<ViewScreen> {
     // профессия
     bool prof = Settings.getValue("profession", defaultValue: true)!;
     bool smallFontForProf =
-        Settings.getValue("small_font_for_prof", defaultValue: false)!;
+    Settings.getValue("small_font_for_prof", defaultValue: false)!;
     if (receipt.profession != null && receipt.profession!.isEmpty && prof) {
       if (smallFontForProf) {
-        job.printlnWithAttr(receipt.profession!, const AttributesString(printerFont: Constant.FONT_B));
+        job.printlnWithAttr(receipt.profession!,
+            const AttributesString(printerFont: Constant.FONT_B));
       } else {
         job.println(receipt.profession!);
       }
     }
 
     // description
-    if(receipt.description!.isNotEmpty){
+    if (receipt.description!.isNotEmpty) {
       List<String> description = [];
-      for(DescriptionRow row in receipt.description!) {
-        if(row.part!.isNotEmpty) {
+      for (DescriptionRow row in receipt.description!) {
+        if (row.part!.isNotEmpty) {
           description.add(row.part!);
         }
       }
-      if(description.isNotEmpty){
+      if (description.isNotEmpty) {
         if (ch == ' ') {
           job.ln();
         } else {
@@ -341,7 +393,7 @@ class ViewScreenState extends State<ViewScreen> {
         for (String row in description) {
           job.println(row);
         }
-        if(innInHead){
+        if (innInHead) {
           if (ch == ' ') {
             job.ln();
           } else {
@@ -349,7 +401,6 @@ class ViewScreenState extends State<ViewScreen> {
           }
         }
       }
-
     }
 
     // реквизиты самозанятого
@@ -379,21 +430,23 @@ class ViewScreenState extends State<ViewScreen> {
         "Наименование", "Сумма", const AttributesString(bold: true));
 
     // как выводить
-    String howPrintService = Settings.getValue("howPrintService",defaultValue: "auto")!;
+    String howPrintService =
+    Settings.getValue("howPrintService", defaultValue: "auto")!;
 
     // цикл по позициям чека
     int n = 1;
-    for (Service s in receipt.services!){
+    for (Service s in receipt.services!) {
       bool howPrint = s.quantity! > 1;
-      if(howPrintService == "none"){
-        howPrint=false;
-      }else if(howPrintService == "always"){
+      if (howPrintService == "none") {
+        howPrint = false;
+      } else if (howPrintService == "always") {
         howPrint = true;
       }
-      if(howPrint){
+      if (howPrint) {
         job.println("$n.${s.name}");
-        job.leftRightText("${formatPrice.format(s.amount)} X ${s.quantity}", formatPrice.format(s.amount!*s.quantity!));
-      }else {
+        job.leftRightText("${formatPrice.format(s.amount)} X ${s.quantity}",
+            formatPrice.format(s.amount! * s.quantity!));
+      } else {
         job.leftRightText("$n.${s.name}", formatPrice.format(s.amount));
       }
       n++;
@@ -407,42 +460,50 @@ class ViewScreenState extends State<ViewScreen> {
         const AttributesString(bold: true));
 
     // данные продавца
-    if(!innInHead) {
+    if (!innInHead) {
       if (ch == ' ') {
         job.ln();
       } else {
         job.drawLine(ch);
       }
 
-      job.leftRightText("Режим НО","НПД");
-      job.leftRightText("ИНН",innInfo!.inn!);
+      job.leftRightText("Режим НО", "НПД");
+      job.leftRightText("ИНН", innInfo!.inn!);
 
       // телефон и емайл
       if (phone && receipt.phone != null && receipt.phone!.isNotEmpty) {
-        job.leftRightText("Номер телефона",receipt.phone!);
+        job.leftRightText("Номер телефона", receipt.phone!);
       }
       if (email && receipt.email != null && receipt.email!.isNotEmpty) {
-        job.leftRightText("Email",receipt.email!);
+        job.leftRightText("Email", receipt.email!);
       }
-
     }
 
     // платежный партнер
-    if(receipt.partnerInn != null) {
-      if(ch==' '){job.ln();}else{job.drawLine(ch);}
+    if (receipt.partnerInn != null) {
+      if (ch == ' ') {
+        job.ln();
+      } else {
+        job.drawLine(ch);
+      }
       job.leftRightText("Чек сформировал", receipt.partnerDisplayName!);
       job.leftRightText("ИНН", receipt.partnerInn!);
     }
 
     // покупатель
-    if(receipt.clientInn != null) {
-      if(ch==' '){job.ln();}else{job.drawLine(ch);}
+    if (receipt.clientInn != null) {
+      if (ch == ' ') {
+        job.ln();
+      } else {
+        job.drawLine(ch);
+      }
       AttributesString attrStrSection = const AttributesString(bold: true);
       job.printlnWithAttr("Покупатель:", attrStrSection);
       job.leftRightText("ИНН", receipt.clientInn!);
 
-      bool isPrintName = Settings.getValue("printClientName",defaultValue: false)!;
-      if(isPrintName) {
+      bool isPrintName =
+      Settings.getValue("printClientName", defaultValue: false)!;
+      if (isPrintName) {
         job.println(receipt.clientDisplayName!);
       }
     }
@@ -451,18 +512,17 @@ class ViewScreenState extends State<ViewScreen> {
     // qr
 
     AttributesQRcode attributesQRcode = AttributesQRcode(
-      alignment: Constant.ALIGNMENT_CENTER,
-      multiply: Settings.getValue<double>("qr_size",defaultValue: 6)!.toInt()
-    );
-    job.qrcode(widget.rId.imageUrl(),attributesQRcode);
+        alignment: Constant.ALIGNMENT_CENTER,
+        multiply:
+        Settings.getValue<double>("qr_size", defaultValue: 6)!.toInt());
+    job.qrcode(widget.rId.imageUrl(), attributesQRcode);
 
     // вызов апи
-    RawbtApi.printJob(job);
+    RawbtApi().printJob(job);
   }
 
   void printImage() async {
-
-
+//    showProgressDialog(context);
 
     // задание
     var job = PrintJob();
@@ -475,14 +535,11 @@ class ViewScreenState extends State<ViewScreen> {
     await job.imageFromNetwork(widget.rId.imageUrl());
 
     // вызов апи
-    RawbtApi.printJob(job);
-
-
+    RawbtApi().printJob(job);
   }
-
-
-
 }
+
+
 
 class MultiLinesTitle extends StatelessWidget {
   final Receipt receipt;
@@ -514,7 +571,7 @@ class MultiLinesTitle extends StatelessWidget {
         bottom: 70,
         child: Text('ИНН ${receipt.inn!}',
             style:
-                const TextStyle(fontSize: 10, fontWeight: FontWeight.normal)),
+            const TextStyle(fontSize: 10, fontWeight: FontWeight.normal)),
       ),
     ]);
   }
